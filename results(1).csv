@@ -1,0 +1,75 @@
+Number,Elapsed,Statement,Feedback,Rows
+1,0.03,CREATE OR REPLACE VIEW v_patients_full ASSELECT    p.patient,View created.,0
+2,0.00,COMMENT ON VIEW v_patients_full IS 'Pilna pacientu informaci,"Error at line 1/12: ORA-32594: invalid object category for COMMENT command
+ORA-06512: at ""SYS.WWV_DBMS_SQL_APEX_220100"", line 847
+ORA-06512: at ""SYS.DBMS_SYS_SQL"", line 1658
+ORA-06512: at ""SYS.WWV_DBMS_SQL_APEX_220100"", line 833
+ORA-06512: at ""APEX_220100.WWV_FLOW_DYNAMIC_EXEC"", line 1903",
+3,0.02,CREATE OR REPLACE VIEW v_doctors_full ASSELECT    d.doctor_i,View created.,0
+4,0.00,COMMENT ON VIEW v_doctors_full IS 'Gydytoju sarašas su visu ,"Error at line 1/12: ORA-32594: invalid object category for COMMENT command
+ORA-06512: at ""SYS.WWV_DBMS_SQL_APEX_220100"", line 847
+ORA-06512: at ""SYS.DBMS_SYS_SQL"", line 1658
+ORA-06512: at ""SYS.WWV_DBMS_SQL_APEX_220100"", line 833
+ORA-06512: at ""APEX_220100.WWV_FLOW_DYNAMIC_EXEC"", line 1903",
+5,0.01,CREATE OR REPLACE VIEW v_appointments_calendar ASSELECT    a,View created.,0
+6,0.00,COMMENT ON VIEW v_appointments_calendar IS 'Vizitu kalendori,"Error at line 1/12: ORA-32594: invalid object category for COMMENT command
+ORA-06512: at ""SYS.WWV_DBMS_SQL_APEX_220100"", line 847
+ORA-06512: at ""SYS.DBMS_SYS_SQL"", line 1658
+ORA-06512: at ""SYS.WWV_DBMS_SQL_APEX_220100"", line 833
+ORA-06512: at ""APEX_220100.WWV_FLOW_DYNAMIC_EXEC"", line 1903",
+7,0.01,CREATE OR REPLACE VIEW v_admissions_current ASSELECT    a.ad,View created.,0
+8,0.00,COMMENT ON VIEW v_admissions_current IS 'Dabartiniai priemim,"Error at line 1/12: ORA-32594: invalid object category for COMMENT command
+ORA-06512: at ""SYS.WWV_DBMS_SQL_APEX_220100"", line 847
+ORA-06512: at ""SYS.DBMS_SYS_SQL"", line 1658
+ORA-06512: at ""SYS.WWV_DBMS_SQL_APEX_220100"", line 833
+ORA-06512: at ""APEX_220100.WWV_FLOW_DYNAMIC_EXEC"", line 1903",
+9,0.01,CREATE OR REPLACE VIEW v_bills_detailed ASSELECT    b.bill_i,View created.,0
+10,0.01,COMMENT ON VIEW v_bills_detailed IS 'Saskaitos su detalia in,"Error at line 1/12: ORA-32594: invalid object category for COMMENT command
+ORA-06512: at ""SYS.WWV_DBMS_SQL_APEX_220100"", line 847
+ORA-06512: at ""SYS.DBMS_SYS_SQL"", line 1658
+ORA-06512: at ""SYS.WWV_DBMS_SQL_APEX_220100"", line 833
+ORA-06512: at ""APEX_220100.WWV_FLOW_DYNAMIC_EXEC"", line 1903",
+11,0.00,CREATE OR REPLACE VIEW v_bills_unpaid ASSELECT * FROM v_bill,View created.,0
+12,0.00,COMMENT ON VIEW v_bills_unpaid IS 'Tik neapmoketos ir dalina,"Error at line 1/12: ORA-32594: invalid object category for COMMENT command
+ORA-06512: at ""SYS.WWV_DBMS_SQL_APEX_220100"", line 847
+ORA-06512: at ""SYS.DBMS_SYS_SQL"", line 1658
+ORA-06512: at ""SYS.WWV_DBMS_SQL_APEX_220100"", line 833
+ORA-06512: at ""APEX_220100.WWV_FLOW_DYNAMIC_EXEC"", line 1903",
+13,0.01,CREATE OR REPLACE VIEW v_beds_occupancy ASSELECT    b.bed_id,View created.,0
+14,0.00,COMMENT ON VIEW v_beds_occupancy IS 'Lovu užimtumas real-tim,"Error at line 1/12: ORA-32594: invalid object category for COMMENT command
+ORA-06512: at ""SYS.WWV_DBMS_SQL_APEX_220100"", line 847
+ORA-06512: at ""SYS.DBMS_SYS_SQL"", line 1658
+ORA-06512: at ""SYS.WWV_DBMS_SQL_APEX_220100"", line 833
+ORA-06512: at ""APEX_220100.WWV_FLOW_DYNAMIC_EXEC"", line 1903",
+15,0.01,CREATE OR REPLACE VIEW v_patient_diagnoses_full ASSELECT    ,View created.,0
+16,0.00,COMMENT ON VIEW v_patient_diagnoses_full IS 'Pacientu diagno,"Error at line 1/12: ORA-32594: invalid object category for COMMENT command
+ORA-06512: at ""SYS.WWV_DBMS_SQL_APEX_220100"", line 847
+ORA-06512: at ""SYS.DBMS_SYS_SQL"", line 1658
+ORA-06512: at ""SYS.WWV_DBMS_SQL_APEX_220100"", line 833
+ORA-06512: at ""APEX_220100.WWV_FLOW_DYNAMIC_EXEC"", line 1903",
+17,0.02,CREATE OR REPLACE VIEW v_prescriptions_full ASSELECT    pr.p,View created.,0
+18,0.00,COMMENT ON VIEW v_prescriptions_full IS 'Receptai su pilna i,"Error at line 1/12: ORA-32594: invalid object category for COMMENT command
+ORA-06512: at ""SYS.WWV_DBMS_SQL_APEX_220100"", line 847
+ORA-06512: at ""SYS.DBMS_SYS_SQL"", line 1658
+ORA-06512: at ""SYS.WWV_DBMS_SQL_APEX_220100"", line 833
+ORA-06512: at ""APEX_220100.WWV_FLOW_DYNAMIC_EXEC"", line 1903",
+19,0.01,CREATE OR REPLACE VIEW v_lab_tests_full ASSELECT    lt.lab_t,View created.,0
+20,0.00,COMMENT ON VIEW v_lab_tests_full IS 'Laboratoriniai tyrimai ,"Error at line 1/12: ORA-32594: invalid object category for COMMENT command
+ORA-06512: at ""SYS.WWV_DBMS_SQL_APEX_220100"", line 847
+ORA-06512: at ""SYS.DBMS_SYS_SQL"", line 1658
+ORA-06512: at ""SYS.WWV_DBMS_SQL_APEX_220100"", line 833
+ORA-06512: at ""APEX_220100.WWV_FLOW_DYNAMIC_EXEC"", line 1903",
+21,0.01,CREATE OR REPLACE VIEW v_dashboard_stats ASSELECT    (SELECT,View created.,0
+22,0.00,COMMENT ON VIEW v_dashboard_stats IS 'Dashboard KPI statisti,"Error at line 1/12: ORA-32594: invalid object category for COMMENT command
+ORA-06512: at ""SYS.WWV_DBMS_SQL_APEX_220100"", line 847
+ORA-06512: at ""SYS.DBMS_SYS_SQL"", line 1658
+ORA-06512: at ""SYS.WWV_DBMS_SQL_APEX_220100"", line 833
+ORA-06512: at ""APEX_220100.WWV_FLOW_DYNAMIC_EXEC"", line 1903",
+23,0.01,CREATE OR REPLACE VIEW v_department_stats ASSELECT    d.depa,View created.,0
+24,0.00,COMMENT ON VIEW v_department_stats IS 'Skyriu statistika',"Error at line 1/12: ORA-32594: invalid object category for COMMENT command
+ORA-06512: at ""SYS.WWV_DBMS_SQL_APEX_220100"", line 847
+ORA-06512: at ""SYS.DBMS_SYS_SQL"", line 1658
+ORA-06512: at ""SYS.WWV_DBMS_SQL_APEX_220100"", line 833
+ORA-06512: at ""APEX_220100.WWV_FLOW_DYNAMIC_EXEC"", line 1903",
+25,0.01,SELECT 'Sukurta ' || COUNT(*) || ' views' AS infoFROM user_v,Error at line 1/55: ORA-00923: FROM keyword not found where expected,
+26,0.00,COMMIT,Statement processed.,0

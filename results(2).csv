@@ -1,0 +1,253 @@
+Number,Elapsed,Statement,Feedback,Rows
+1,0.14,"INSERT INTO departments (department_name, description, phone",1 row(s) inserted.,1
+2,0.00,"INSERT INTO departments (department_name, description, phone",1 row(s) inserted.,1
+3,0.01,"INSERT INTO departments (department_name, description, phone",1 row(s) inserted.,1
+4,0.00,"INSERT INTO departments (department_name, description, phone",1 row(s) inserted.,1
+5,0.00,"INSERT INTO departments (department_name, description, phone",1 row(s) inserted.,1
+6,0.01,"INSERT INTO departments (department_name, description, phone",1 row(s) inserted.,1
+7,0.00,COMMIT,Statement processed.,0
+8,0.01,"INSERT INTO employees (first_name, last_name, date_of_birth,",1 row(s) inserted.,1
+9,0.00,"INSERT INTO employees (first_name, last_name, date_of_birth,",1 row(s) inserted.,1
+10,0.00,"INSERT INTO employees (first_name, last_name, date_of_birth,",1 row(s) inserted.,1
+11,0.01,"INSERT INTO employees (first_name, last_name, date_of_birth,",1 row(s) inserted.,1
+12,0.00,"INSERT INTO employees (first_name, last_name, date_of_birth,",1 row(s) inserted.,1
+13,0.00,"INSERT INTO employees (first_name, last_name, date_of_birth,",1 row(s) inserted.,1
+14,0.01,"INSERT INTO employees (first_name, last_name, date_of_birth,",1 row(s) inserted.,1
+15,0.00,"INSERT INTO employees (first_name, last_name, date_of_birth,",1 row(s) inserted.,1
+16,0.00,"INSERT INTO employees (first_name, last_name, date_of_birth,",1 row(s) inserted.,1
+17,0.01,"INSERT INTO employees (first_name, last_name, date_of_birth,",1 row(s) inserted.,1
+18,0.00,COMMIT,Statement processed.,0
+19,0.02,"INSERT INTO doctors (doctor_id, department_id, specializatio",1 row(s) inserted.,1
+20,0.00,"INSERT INTO doctors (doctor_id, department_id, specializatio",1 row(s) inserted.,1
+21,0.01,"INSERT INTO doctors (doctor_id, department_id, specializatio",1 row(s) inserted.,1
+22,0.00,"INSERT INTO doctors (doctor_id, department_id, specializatio",1 row(s) inserted.,1
+23,0.00,"INSERT INTO doctors (doctor_id, department_id, specializatio",1 row(s) inserted.,1
+24,0.01,"INSERT INTO doctors (doctor_id, department_id, specializatio",1 row(s) inserted.,1
+25,0.00,COMMIT,Statement processed.,0
+26,0.01,UPDATE departments SET head_doctor_id = 1 WHERE department_i,1 row(s) updated.,1
+27,0.00,UPDATE departments SET head_doctor_id = 2 WHERE department_i,1 row(s) updated.,1
+28,0.00,UPDATE departments SET head_doctor_id = 3 WHERE department_i,1 row(s) updated.,1
+29,0.00,UPDATE departments SET head_doctor_id = 4 WHERE department_i,1 row(s) updated.,1
+30,0.00,UPDATE departments SET head_doctor_id = 5 WHERE department_i,1 row(s) updated.,1
+31,0.00,UPDATE departments SET head_doctor_id = 6 WHERE department_i,1 row(s) updated.,1
+32,0.00,COMMIT,Statement processed.,0
+33,0.01,"INSERT INTO nurses (nurse_id, department_id, certification_l",1 row(s) inserted.,1
+34,0.01,"INSERT INTO nurses (nurse_id, department_id, certification_l",1 row(s) inserted.,1
+35,0.00,"INSERT INTO nurses (nurse_id, department_id, certification_l",1 row(s) inserted.,1
+36,0.00,"INSERT INTO nurses (nurse_id, department_id, certification_l",1 row(s) inserted.,1
+37,0.00,COMMIT,Statement processed.,0
+38,0.01,"INSERT INTO rooms (department_id, room_number, room_type, fl",1 row(s) inserted.,1
+39,0.00,"INSERT INTO rooms (department_id, room_number, room_type, fl",1 row(s) inserted.,1
+40,0.00,"INSERT INTO rooms (department_id, room_number, room_type, fl",1 row(s) inserted.,1
+41,0.00,"INSERT INTO rooms (department_id, room_number, room_type, fl",1 row(s) inserted.,1
+42,0.00,"INSERT INTO rooms (department_id, room_number, room_type, fl",1 row(s) inserted.,1
+43,0.00,"INSERT INTO rooms (department_id, room_number, room_type, fl",1 row(s) inserted.,1
+44,0.00,"INSERT INTO rooms (department_id, room_number, room_type, fl",1 row(s) inserted.,1
+45,0.00,"INSERT INTO rooms (department_id, room_number, room_type, fl",1 row(s) inserted.,1
+46,0.00,"INSERT INTO rooms (department_id, room_number, room_type, fl",1 row(s) inserted.,1
+47,0.00,"INSERT INTO rooms (department_id, room_number, room_type, fl",1 row(s) inserted.,1
+48,0.00,"INSERT INTO rooms (department_id, room_number, room_type, fl",1 row(s) inserted.,1
+49,0.01,"INSERT INTO rooms (department_id, room_number, room_type, fl",1 row(s) inserted.,1
+50,0.00,"INSERT INTO rooms (department_id, room_number, room_type, fl",1 row(s) inserted.,1
+51,0.00,"INSERT INTO rooms (department_id, room_number, room_type, fl",1 row(s) inserted.,1
+52,0.01,COMMIT,Statement processed.,0
+53,0.01,"INSERT INTO beds (room_id, bed_number, bed_status) VALUES (1","ORA-04091: table STUD_581.BEDS is mutating, trigger/function may not see it
+ORA-06512: at ""STUD_581.TRG_ROOM_AVAILABILITY"", line 9
+ORA-04088: error during execution of trigger 'STUD_581.TRG_ROOM_AVAILABILITY'
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+54,0.00,"INSERT INTO beds (room_id, bed_number, bed_status) VALUES (2","ORA-04091: table STUD_581.BEDS is mutating, trigger/function may not see it
+ORA-06512: at ""STUD_581.TRG_ROOM_AVAILABILITY"", line 9
+ORA-04088: error during execution of trigger 'STUD_581.TRG_ROOM_AVAILABILITY'
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+55,0.01,"INSERT INTO beds (room_id, bed_number, bed_status) VALUES (2","ORA-04091: table STUD_581.BEDS is mutating, trigger/function may not see it
+ORA-06512: at ""STUD_581.TRG_ROOM_AVAILABILITY"", line 9
+ORA-04088: error during execution of trigger 'STUD_581.TRG_ROOM_AVAILABILITY'
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+56,0.00,"INSERT INTO beds (room_id, bed_number, bed_status) VALUES (3","ORA-04091: table STUD_581.BEDS is mutating, trigger/function may not see it
+ORA-06512: at ""STUD_581.TRG_ROOM_AVAILABILITY"", line 9
+ORA-04088: error during execution of trigger 'STUD_581.TRG_ROOM_AVAILABILITY'
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+57,0.00,"INSERT INTO beds (room_id, bed_number, bed_status) VALUES (3","ORA-04091: table STUD_581.BEDS is mutating, trigger/function may not see it
+ORA-06512: at ""STUD_581.TRG_ROOM_AVAILABILITY"", line 9
+ORA-04088: error during execution of trigger 'STUD_581.TRG_ROOM_AVAILABILITY'
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+58,0.00,"INSERT INTO beds (room_id, bed_number, bed_status) VALUES (3","ORA-04091: table STUD_581.BEDS is mutating, trigger/function may not see it
+ORA-06512: at ""STUD_581.TRG_ROOM_AVAILABILITY"", line 9
+ORA-04088: error during execution of trigger 'STUD_581.TRG_ROOM_AVAILABILITY'
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+59,0.00,"INSERT INTO beds (room_id, bed_number, bed_status) VALUES (3","ORA-04091: table STUD_581.BEDS is mutating, trigger/function may not see it
+ORA-06512: at ""STUD_581.TRG_ROOM_AVAILABILITY"", line 9
+ORA-04088: error during execution of trigger 'STUD_581.TRG_ROOM_AVAILABILITY'
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+60,0.00,"INSERT INTO beds (room_id, bed_number, bed_status) VALUES (4","ORA-04091: table STUD_581.BEDS is mutating, trigger/function may not see it
+ORA-06512: at ""STUD_581.TRG_ROOM_AVAILABILITY"", line 9
+ORA-04088: error during execution of trigger 'STUD_581.TRG_ROOM_AVAILABILITY'
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+61,0.01,"INSERT INTO beds (room_id, bed_number, bed_status) VALUES (5","ORA-04091: table STUD_581.BEDS is mutating, trigger/function may not see it
+ORA-06512: at ""STUD_581.TRG_ROOM_AVAILABILITY"", line 9
+ORA-04088: error during execution of trigger 'STUD_581.TRG_ROOM_AVAILABILITY'
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+62,0.00,"INSERT INTO beds (room_id, bed_number, bed_status) VALUES (5","ORA-04091: table STUD_581.BEDS is mutating, trigger/function may not see it
+ORA-06512: at ""STUD_581.TRG_ROOM_AVAILABILITY"", line 9
+ORA-04088: error during execution of trigger 'STUD_581.TRG_ROOM_AVAILABILITY'
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+63,0.00,"INSERT INTO beds (room_id, bed_number, bed_status) VALUES (6","ORA-04091: table STUD_581.BEDS is mutating, trigger/function may not see it
+ORA-06512: at ""STUD_581.TRG_ROOM_AVAILABILITY"", line 9
+ORA-04088: error during execution of trigger 'STUD_581.TRG_ROOM_AVAILABILITY'
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+64,0.00,"INSERT INTO beds (room_id, bed_number, bed_status) VALUES (7","ORA-04091: table STUD_581.BEDS is mutating, trigger/function may not see it
+ORA-06512: at ""STUD_581.TRG_ROOM_AVAILABILITY"", line 9
+ORA-04088: error during execution of trigger 'STUD_581.TRG_ROOM_AVAILABILITY'
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+65,0.00,"INSERT INTO beds (room_id, bed_number, bed_status) VALUES (8","ORA-04091: table STUD_581.BEDS is mutating, trigger/function may not see it
+ORA-06512: at ""STUD_581.TRG_ROOM_AVAILABILITY"", line 9
+ORA-04088: error during execution of trigger 'STUD_581.TRG_ROOM_AVAILABILITY'
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+66,0.00,"INSERT INTO beds (room_id, bed_number, bed_status) VALUES (8","ORA-04091: table STUD_581.BEDS is mutating, trigger/function may not see it
+ORA-06512: at ""STUD_581.TRG_ROOM_AVAILABILITY"", line 9
+ORA-04088: error during execution of trigger 'STUD_581.TRG_ROOM_AVAILABILITY'
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+67,0.00,"INSERT INTO beds (room_id, bed_number, bed_status) VALUES (9","ORA-04091: table STUD_581.BEDS is mutating, trigger/function may not see it
+ORA-06512: at ""STUD_581.TRG_ROOM_AVAILABILITY"", line 9
+ORA-04088: error during execution of trigger 'STUD_581.TRG_ROOM_AVAILABILITY'
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+68,0.00,"INSERT INTO beds (room_id, bed_number, bed_status) VALUES (1","ORA-04091: table STUD_581.BEDS is mutating, trigger/function may not see it
+ORA-06512: at ""STUD_581.TRG_ROOM_AVAILABILITY"", line 9
+ORA-04088: error during execution of trigger 'STUD_581.TRG_ROOM_AVAILABILITY'
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+69,0.01,"INSERT INTO beds (room_id, bed_number, bed_status) VALUES (1","ORA-04091: table STUD_581.BEDS is mutating, trigger/function may not see it
+ORA-06512: at ""STUD_581.TRG_ROOM_AVAILABILITY"", line 9
+ORA-04088: error during execution of trigger 'STUD_581.TRG_ROOM_AVAILABILITY'
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+70,0.00,"INSERT INTO beds (room_id, bed_number, bed_status) VALUES (1","ORA-04091: table STUD_581.BEDS is mutating, trigger/function may not see it
+ORA-06512: at ""STUD_581.TRG_ROOM_AVAILABILITY"", line 9
+ORA-04088: error during execution of trigger 'STUD_581.TRG_ROOM_AVAILABILITY'
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+71,0.00,"INSERT INTO beds (room_id, bed_number, bed_status) VALUES (1","ORA-04091: table STUD_581.BEDS is mutating, trigger/function may not see it
+ORA-06512: at ""STUD_581.TRG_ROOM_AVAILABILITY"", line 9
+ORA-04088: error during execution of trigger 'STUD_581.TRG_ROOM_AVAILABILITY'
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+72,0.01,"INSERT INTO beds (room_id, bed_number, bed_status) VALUES (1","ORA-04091: table STUD_581.BEDS is mutating, trigger/function may not see it
+ORA-06512: at ""STUD_581.TRG_ROOM_AVAILABILITY"", line 9
+ORA-04088: error during execution of trigger 'STUD_581.TRG_ROOM_AVAILABILITY'
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+73,0.00,"INSERT INTO beds (room_id, bed_number, bed_status) VALUES (1","ORA-04091: table STUD_581.BEDS is mutating, trigger/function may not see it
+ORA-06512: at ""STUD_581.TRG_ROOM_AVAILABILITY"", line 9
+ORA-04088: error during execution of trigger 'STUD_581.TRG_ROOM_AVAILABILITY'
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+74,0.00,"INSERT INTO beds (room_id, bed_number, bed_status) VALUES (1","ORA-04091: table STUD_581.BEDS is mutating, trigger/function may not see it
+ORA-06512: at ""STUD_581.TRG_ROOM_AVAILABILITY"", line 9
+ORA-04088: error during execution of trigger 'STUD_581.TRG_ROOM_AVAILABILITY'
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+75,0.01,"INSERT INTO beds (room_id, bed_number, bed_status) VALUES (1","ORA-04091: table STUD_581.BEDS is mutating, trigger/function may not see it
+ORA-06512: at ""STUD_581.TRG_ROOM_AVAILABILITY"", line 9
+ORA-04088: error during execution of trigger 'STUD_581.TRG_ROOM_AVAILABILITY'
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+76,0.00,"INSERT INTO beds (room_id, bed_number, bed_status) VALUES (1","ORA-04091: table STUD_581.BEDS is mutating, trigger/function may not see it
+ORA-06512: at ""STUD_581.TRG_ROOM_AVAILABILITY"", line 9
+ORA-04088: error during execution of trigger 'STUD_581.TRG_ROOM_AVAILABILITY'
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+77,0.00,COMMIT,Statement processed.,0
+78,0.49,"INSERT INTO patients (first_name, last_name, date_of_birth, ",1 row(s) inserted.,1
+79,0.01,"INSERT INTO patients (first_name, last_name, date_of_birth, ",1 row(s) inserted.,1
+80,0.00,"INSERT INTO patients (first_name, last_name, date_of_birth, ",1 row(s) inserted.,1
+81,0.00,"INSERT INTO patients (first_name, last_name, date_of_birth, ",1 row(s) inserted.,1
+82,0.01,"INSERT INTO patients (first_name, last_name, date_of_birth, ",1 row(s) inserted.,1
+83,0.00,"INSERT INTO patients (first_name, last_name, date_of_birth, ",1 row(s) inserted.,1
+84,0.00,"INSERT INTO patients (first_name, last_name, date_of_birth, ",1 row(s) inserted.,1
+85,0.00,"INSERT INTO patients (first_name, last_name, date_of_birth, ",1 row(s) inserted.,1
+86,0.00,"INSERT INTO patients (first_name, last_name, date_of_birth, ",1 row(s) inserted.,1
+87,0.01,"INSERT INTO patients (first_name, last_name, date_of_birth, ",1 row(s) inserted.,1
+88,0.00,COMMIT,Statement processed.,0
+89,0.07,"INSERT INTO diagnoses (diagnosis_code, diagnosis_name, categ",1 row(s) inserted.,1
+90,0.00,"INSERT INTO diagnoses (diagnosis_code, diagnosis_name, categ",1 row(s) inserted.,1
+91,0.00,"INSERT INTO diagnoses (diagnosis_code, diagnosis_name, categ",1 row(s) inserted.,1
+92,0.00,"INSERT INTO diagnoses (diagnosis_code, diagnosis_name, categ",1 row(s) inserted.,1
+93,0.00,"INSERT INTO diagnoses (diagnosis_code, diagnosis_name, categ",1 row(s) inserted.,1
+94,0.00,"INSERT INTO diagnoses (diagnosis_code, diagnosis_name, categ",1 row(s) inserted.,1
+95,0.00,"INSERT INTO diagnoses (diagnosis_code, diagnosis_name, categ",1 row(s) inserted.,1
+96,0.00,"INSERT INTO diagnoses (diagnosis_code, diagnosis_name, categ",1 row(s) inserted.,1
+97,0.00,"INSERT INTO diagnoses (diagnosis_code, diagnosis_name, categ",1 row(s) inserted.,1
+98,0.00,"INSERT INTO diagnoses (diagnosis_code, diagnosis_name, categ",1 row(s) inserted.,1
+99,0.01,COMMIT,Statement processed.,0
+100,0.15,"INSERT INTO medications (medication_name, generic_name, manu",1 row(s) inserted.,1
+101,0.00,"INSERT INTO medications (medication_name, generic_name, manu",1 row(s) inserted.,1
+102,0.00,"INSERT INTO medications (medication_name, generic_name, manu",1 row(s) inserted.,1
+103,0.01,"INSERT INTO medications (medication_name, generic_name, manu",1 row(s) inserted.,1
+104,0.00,"INSERT INTO medications (medication_name, generic_name, manu",1 row(s) inserted.,1
+105,0.00,"INSERT INTO medications (medication_name, generic_name, manu",1 row(s) inserted.,1
+106,0.01,"INSERT INTO medications (medication_name, generic_name, manu",1 row(s) inserted.,1
+107,0.00,"INSERT INTO medications (medication_name, generic_name, manu",1 row(s) inserted.,1
+108,0.00,"INSERT INTO medications (medication_name, generic_name, manu",1 row(s) inserted.,1
+109,0.01,"INSERT INTO medications (medication_name, generic_name, manu",1 row(s) inserted.,1
+110,0.00,COMMIT,Statement processed.,0
+111,0.06,"INSERT INTO appointments (patient_id, doctor_id, appointment",1 row(s) inserted.,1
+112,0.00,"INSERT INTO appointments (patient_id, doctor_id, appointment",1 row(s) inserted.,1
+113,0.01,"INSERT INTO appointments (patient_id, doctor_id, appointment",1 row(s) inserted.,1
+114,0.00,"INSERT INTO appointments (patient_id, doctor_id, appointment",1 row(s) inserted.,1
+115,0.00,"INSERT INTO appointments (patient_id, doctor_id, appointment",1 row(s) inserted.,1
+116,0.01,"INSERT INTO appointments (patient_id, doctor_id, appointment",1 row(s) inserted.,1
+117,0.00,"INSERT INTO appointments (patient_id, doctor_id, appointment",1 row(s) inserted.,1
+118,0.00,COMMIT,Statement processed.,0
+119,0.15,"INSERT INTO admissions (patient_id, bed_id, admitting_doctor","ORA-01403: no data found
+ORA-06512: at ""STUD_581.TRG_ADM_BED_AVAILABLE"", line 6
+ORA-04088: error during execution of trigger 'STUD_581.TRG_ADM_BED_AVAILABLE'
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+120,0.00,"INSERT INTO admissions (patient_id, bed_id, admitting_doctor","ORA-01403: no data found
+ORA-06512: at ""STUD_581.TRG_ADM_BED_AVAILABLE"", line 6
+ORA-04088: error during execution of trigger 'STUD_581.TRG_ADM_BED_AVAILABLE'
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+121,0.01,"INSERT INTO admissions (patient_id, bed_id, admitting_doctor","ORA-01403: no data found
+ORA-06512: at ""STUD_581.TRG_ADM_BED_AVAILABLE"", line 6
+ORA-04088: error during execution of trigger 'STUD_581.TRG_ADM_BED_AVAILABLE'
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+122,0.00,"INSERT INTO admissions (patient_id, bed_id, admitting_doctor","ORA-02291: integrity constraint (STUD_581.FK_ADM_BED) violated - parent key not found
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+123,0.01,"INSERT INTO admissions (patient_id, bed_id, admitting_doctor","ORA-02291: integrity constraint (STUD_581.FK_ADM_BED) violated - parent key not found
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+124,0.00,COMMIT,Statement processed.,0
+125,0.08,"INSERT INTO patient_diagnoses (patient_id, diagnosis_id, doc",1 row(s) inserted.,1
+126,0.00,"INSERT INTO patient_diagnoses (patient_id, diagnosis_id, doc",1 row(s) inserted.,1
+127,0.01,"INSERT INTO patient_diagnoses (patient_id, diagnosis_id, doc",1 row(s) inserted.,1
+128,0.00,"INSERT INTO patient_diagnoses (patient_id, diagnosis_id, doc",1 row(s) inserted.,1
+129,0.00,"INSERT INTO patient_diagnoses (patient_id, diagnosis_id, doc",1 row(s) inserted.,1
+130,0.01,"INSERT INTO patient_diagnoses (patient_id, diagnosis_id, doc",1 row(s) inserted.,1
+131,0.00,"INSERT INTO patient_diagnoses (patient_id, diagnosis_id, doc",1 row(s) inserted.,1
+132,0.00,"INSERT INTO patient_diagnoses (patient_id, diagnosis_id, doc",1 row(s) inserted.,1
+133,0.00,COMMIT,Statement processed.,0
+134,0.03,"INSERT INTO prescriptions (patient_id, doctor_id, medication",1 row(s) inserted.,1
+135,0.00,"INSERT INTO prescriptions (patient_id, doctor_id, medication",1 row(s) inserted.,1
+136,0.01,"INSERT INTO prescriptions (patient_id, doctor_id, medication","ORA-02290: check constraint (STUD_581.CHK_MED_STOCK) violated
+ORA-06512: at ""STUD_581.TRG_PRESC_STOCK_REDUCE"", line 2
+ORA-04088: error during execution of trigger 'STUD_581.TRG_PRESC_STOCK_REDUCE'
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+137,0.00,"INSERT INTO prescriptions (patient_id, doctor_id, medication",1 row(s) inserted.,1
+138,0.00,"INSERT INTO prescriptions (patient_id, doctor_id, medication",1 row(s) inserted.,1
+139,0.01,"INSERT INTO prescriptions (patient_id, doctor_id, medication",1 row(s) inserted.,1
+140,0.00,COMMIT,Statement processed.,0
+141,0.02,"INSERT INTO lab_tests (patient_id, doctor_id, test_type, tes",1 row(s) inserted.,1
+142,0.00,"INSERT INTO lab_tests (patient_id, doctor_id, test_type, tes",1 row(s) inserted.,1
+143,0.01,"INSERT INTO lab_tests (patient_id, doctor_id, test_type, tes",1 row(s) inserted.,1
+144,0.00,"INSERT INTO lab_tests (patient_id, doctor_id, test_type, tes",1 row(s) inserted.,1
+145,0.00,"INSERT INTO lab_tests (patient_id, doctor_id, test_type, tes",1 row(s) inserted.,1
+146,0.01,"INSERT INTO lab_tests (patient_id, doctor_id, test_type, tes",1 row(s) inserted.,1
+147,0.00,"INSERT INTO lab_tests (patient_id, doctor_id, test_type, tes",1 row(s) inserted.,1
+148,0.00,"INSERT INTO lab_tests (patient_id, doctor_id, test_type, tes",1 row(s) inserted.,1
+149,0.01,"INSERT INTO lab_tests (patient_id, doctor_id, test_type, tes",1 row(s) inserted.,1
+150,0.00,COMMIT,Statement processed.,0
+151,0.03,"INSERT INTO bills (patient_id, admission_id, bill_date, due_","ORA-02291: integrity constraint (STUD_581.FK_BILL_ADMISSION) violated - parent key not found
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+152,0.01,"INSERT INTO bills (patient_id, admission_id, bill_date, due_","ORA-02291: integrity constraint (STUD_581.FK_BILL_ADMISSION) violated - parent key not found
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+153,0.00,"INSERT INTO bills (patient_id, admission_id, bill_date, due_","ORA-02291: integrity constraint (STUD_581.FK_BILL_ADMISSION) violated - parent key not found
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+154,0.00,"INSERT INTO bills (patient_id, admission_id, bill_date, due_","ORA-02291: integrity constraint (STUD_581.FK_BILL_ADMISSION) violated - parent key not found
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+155,0.00,"INSERT INTO bills (patient_id, admission_id, bill_date, due_","ORA-02291: integrity constraint (STUD_581.FK_BILL_ADMISSION) violated - parent key not found
+ORA-06512: at ""SYS.DBMS_SQL"", line 1721",
+156,0.00,"INSERT INTO bills (patient_id, appointment_id, bill_date, du",1 row(s) inserted.,1
+157,0.01,"INSERT INTO bills (patient_id, appointment_id, bill_date, du",1 row(s) inserted.,1
+158,0.00,"INSERT INTO bills (patient_id, appointment_id, bill_date, du",1 row(s) inserted.,1
+159,0.00,COMMIT,Statement processed.,0
+160,0.01,SELECT 'Iterpti duomenys:' AS info FROM dualUNION ALL SELECT,Error at line 1/52: ORA-00933: SQL command not properly ended,
+161,0.00,COMMIT,Statement processed.,0
