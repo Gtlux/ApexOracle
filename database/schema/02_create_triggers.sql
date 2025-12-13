@@ -458,7 +458,10 @@ END;
 -- 9. ROOM AVAILABILITY - automatinis palatų prieinamumo atnaujinimas
 -- ============================================================================
 
--- Kai visos lovos palatoje užimtos, palata tampa unavailable
+-- DISABLED: Kai visos lovos palatoje užimtos, palata tampa unavailable
+-- Šis trigger'is sukelia ORA-04091 mutating table problemą APEX SQL Scripts aplinkoje
+-- Room availability bus skaičiuojamas per VIEW v_beds_occupancy vietoj trigger'io
+/*
 CREATE OR REPLACE TRIGGER trg_room_availability
 AFTER INSERT OR UPDATE OR DELETE ON beds
 FOR EACH ROW
@@ -467,16 +470,12 @@ DECLARE
     v_total_beds NUMBER;
     v_available_beds NUMBER;
 BEGIN
-    -- Nustatome room_id
     v_room_id := NVL(:NEW.room_id, :OLD.room_id);
-
-    -- Skaičiuojame bendras lovas ir prieinamas lovas
     SELECT COUNT(*), SUM(CASE WHEN bed_status = 'AVAILABLE' THEN 1 ELSE 0 END)
     INTO v_total_beds, v_available_beds
     FROM beds
     WHERE room_id = v_room_id;
 
-    -- Atnaujinname palatą
     IF v_available_beds > 0 THEN
         UPDATE rooms SET is_available = 'Y' WHERE room_id = v_room_id;
     ELSE
@@ -484,6 +483,7 @@ BEGIN
     END IF;
 END;
 /
+*/
 
 -- ============================================================================
 -- 10. VALIDATION TRIGGERS - papildomi validacijos triggeriai
@@ -499,17 +499,23 @@ DECLARE
     v_room_number VARCHAR2(20);
     v_bed_number VARCHAR2(10);
 BEGIN
-    SELECT b.bed_status, r.room_number, b.bed_number
-    INTO v_bed_status, v_room_number, v_bed_number
-    FROM beds b
-    JOIN rooms r ON b.room_id = r.room_id
-    WHERE b.bed_id = :NEW.bed_id;
+    BEGIN
+        SELECT b.bed_status, r.room_number, b.bed_number
+        INTO v_bed_status, v_room_number, v_bed_number
+        FROM beds b
+        JOIN rooms r ON b.room_id = r.room_id
+        WHERE b.bed_id = :NEW.bed_id;
 
-    IF v_bed_status NOT IN ('AVAILABLE', 'RESERVED') THEN
-        RAISE_APPLICATION_ERROR(-20006,
-            'Lova ' || v_room_number || '-' || v_bed_number ||
-            ' yra ' || v_bed_status || '. Negalima priimti paciento.');
-    END IF;
+        IF v_bed_status NOT IN ('AVAILABLE', 'RESERVED') THEN
+            RAISE_APPLICATION_ERROR(-20006,
+                'Lova ' || v_room_number || '-' || v_bed_number ||
+                ' yra ' || v_bed_status || '. Negalima priimti paciento.');
+        END IF;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            RAISE_APPLICATION_ERROR(-20007,
+                'Lova su ID ' || :NEW.bed_id || ' neegzistuoja. Pirmiausia sukurkite lovą.');
+    END;
 END;
 /
 

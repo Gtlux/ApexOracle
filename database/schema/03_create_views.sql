@@ -54,7 +54,6 @@ SELECT
     ) THEN 'Y' ELSE 'N' END AS currently_admitted
 FROM patients p;
 
-COMMENT ON VIEW v_patients_full IS 'Pilna pacientų informacija su statistika APEX reports';
 
 -- ============================================================================
 -- 2. GYDYTOJŲ VIEWS
@@ -96,7 +95,6 @@ FROM doctors d
 JOIN employees e ON d.doctor_id = e.employee_id
 JOIN departments dept ON d.department_id = dept.department_id;
 
-COMMENT ON VIEW v_doctors_full IS 'Gydytojų sąrašas su visu informacija ir statistika';
 
 -- ============================================================================
 -- 3. VIZITŲ (APPOINTMENTS) VIEWS
@@ -143,7 +141,6 @@ JOIN employees e ON d.doctor_id = e.employee_id
 JOIN doctors doc ON d.doctor_id = doc.doctor_id
 JOIN departments dept ON doc.department_id = dept.department_id;
 
-COMMENT ON VIEW v_appointments_calendar IS 'Vizitų kalendoriaus view su spalvomis APEX Calendar plugin';
 
 -- ============================================================================
 -- 4. PRIĖMIMŲ (ADMISSIONS) VIEWS
@@ -198,7 +195,6 @@ JOIN employees e ON d.doctor_id = e.employee_id
 JOIN doctors doc ON d.doctor_id = doc.doctor_id
 WHERE a.status = 'ADMITTED';
 
-COMMENT ON VIEW v_admissions_current IS 'Dabartiniai priėmimai (hospitalizuoti pacientai)';
 
 -- ============================================================================
 -- 5. SĄSKAITŲ (BILLS) VIEWS
@@ -254,7 +250,6 @@ SELECT
 FROM bills b
 JOIN patients p ON b.patient_id = p.patient_id;
 
-COMMENT ON VIEW v_bills_detailed IS 'Sąskaitos su detalia informacija ir statusais';
 
 -- Nepamokėtos sąskaitos
 CREATE OR REPLACE VIEW v_bills_unpaid AS
@@ -262,7 +257,6 @@ SELECT * FROM v_bills_detailed
 WHERE payment_status IN ('UNPAID', 'PARTIAL', 'OVERDUE')
 ORDER BY due_date;
 
-COMMENT ON VIEW v_bills_unpaid IS 'Tik neapmokėtos ir dalinai apmokėtos sąskaitos';
 
 -- ============================================================================
 -- 6. LOVŲ UŽIMTUMO VIEW
@@ -313,7 +307,6 @@ JOIN departments dept ON r.department_id = dept.department_id
 LEFT JOIN admissions a ON b.bed_id = a.bed_id AND a.status = 'ADMITTED'
 LEFT JOIN patients p ON a.patient_id = p.patient_id;
 
-COMMENT ON VIEW v_beds_occupancy IS 'Lovų užimtumas real-time';
 
 -- ============================================================================
 -- 7. DIAGNOSTIKOS VIEW
@@ -354,7 +347,6 @@ JOIN doctors doc ON pd.doctor_id = doc.doctor_id
 JOIN employees e ON doc.doctor_id = e.employee_id
 JOIN doctors dt ON doc.doctor_id = dt.doctor_id;
 
-COMMENT ON VIEW v_patient_diagnoses_full IS 'Pacientų diagnozės su pilna informacija';
 
 -- ============================================================================
 -- 8. RECEPTŲ VIEW
@@ -408,7 +400,6 @@ JOIN doctors d ON pr.doctor_id = d.doctor_id
 JOIN employees e ON d.doctor_id = e.employee_id
 JOIN doctors dt ON d.doctor_id = dt.doctor_id;
 
-COMMENT ON VIEW v_prescriptions_full IS 'Receptai su pilna informacija';
 
 -- ============================================================================
 -- 9. LABORATORINIŲ TYRIMŲ VIEW
@@ -457,7 +448,6 @@ JOIN doctors d ON lt.doctor_id = d.doctor_id
 JOIN employees e ON d.doctor_id = e.employee_id
 JOIN doctors dt ON d.doctor_id = dt.doctor_id;
 
-COMMENT ON VIEW v_lab_tests_full IS 'Laboratoriniai tyrimai su pilna informacija';
 
 -- ============================================================================
 -- 10. DASHBOARD STATISTICS VIEWS
@@ -483,7 +473,6 @@ SELECT
      WHERE e.employment_status = 'ACTIVE') AS active_nurses
 FROM dual;
 
-COMMENT ON VIEW v_dashboard_stats IS 'Dashboard KPI statistika';
 
 -- Skyriaus statistika
 CREATE OR REPLACE VIEW v_department_stats AS
@@ -521,14 +510,13 @@ SELECT
 FROM departments d
 WHERE d.is_active = 'Y';
 
-COMMENT ON VIEW v_department_stats IS 'Skyrių statistika';
 
 -- ============================================================================
 -- PABAIGA: Visi views sėkmingai sukurti
 -- ============================================================================
 
 SELECT 'Sukurta ' || COUNT(*) || ' views' AS info
-FROM user_views
-WHERE view_name LIKE 'V_%';
+  FROM user_views
+ WHERE view_name LIKE 'V_%';
 
 COMMIT;
