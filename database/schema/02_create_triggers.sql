@@ -528,8 +528,8 @@ END;
 
 -- Informacija apie sukurtus triggerius
 SELECT 'Sukurta ' || COUNT(*) || ' triggerių' AS info
-FROM user_triggers
-WHERE table_name IN (
+  FROM user_triggers
+ WHERE table_name IN (
     'BILLS', 'LAB_TESTS', 'PRESCRIPTIONS', 'PATIENT_DIAGNOSES',
     'APPOINTMENTS', 'ADMISSIONS', 'DIAGNOSES', 'MEDICATIONS',
     'BEDS', 'ROOMS', 'NURSES', 'DOCTORS', 'EMPLOYEES',

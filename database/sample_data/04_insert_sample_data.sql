@@ -422,7 +422,7 @@ INSERT INTO prescriptions (patient_id, doctor_id, medication_id, prescription_da
 VALUES (1, 1, 6, TRUNC(SYSDATE) - 30, '10mg', '1 kartą per dieną', 90, 90, 2, 'Gerti rytais', 'ACTIVE');
 
 INSERT INTO prescriptions (patient_id, doctor_id, medication_id, prescription_date, dosage, frequency, duration_days, quantity, refills_allowed, instructions, status)
-VALUES (4, 5, 2, TRUNC(SYSDATE) - 365, '500mg', '2 kartus per dieną', 180, 360, 3, 'Gerti su maistu rytais ir vakarais', 'ACTIVE');
+VALUES (4, 5, 2, TRUNC(SYSDATE) - 365, '500mg', '2 kartus per dieną', 90, 180, 3, 'Gerti su maistu rytais ir vakarais', 'ACTIVE');
 
 INSERT INTO prescriptions (patient_id, doctor_id, medication_id, prescription_date, dosage, frequency, duration_days, quantity, refills_allowed, instructions, status)
 VALUES (2, 3, 3, TRUNC(SYSDATE) - 10, '500mg', '3 kartus per dieną', 7, 21, 0, 'Gerti 8 val. intervalu', 'COMPLETED');
@@ -505,20 +505,35 @@ COMMIT;
 
 -- Statistika
 SELECT 'Įterpti duomenys:' AS info FROM dual
-UNION ALL SELECT '- Skyriai: ' || COUNT(*) FROM departments
-UNION ALL SELECT '- Darbuotojai: ' || COUNT(*) FROM employees
-UNION ALL SELECT '- Gydytojai: ' || COUNT(*) FROM doctors
-UNION ALL SELECT '- Seserys: ' || COUNT(*) FROM nurses
-UNION ALL SELECT '- Palatai: ' || COUNT(*) FROM rooms
-UNION ALL SELECT '- Lovos: ' || COUNT(*) FROM beds
-UNION ALL SELECT '- Pacientai: ' || COUNT(*) FROM patients
-UNION ALL SELECT '- Diagnozės: ' || COUNT(*) FROM diagnoses
-UNION ALL SELECT '- Vaistai: ' || COUNT(*) FROM medications
-UNION ALL SELECT '- Vizitai: ' || COUNT(*) FROM appointments
-UNION ALL SELECT '- Priėmimai: ' || COUNT(*) FROM admissions
-UNION ALL SELECT '- Pacientų diagnozės: ' || COUNT(*) FROM patient_diagnoses
-UNION ALL SELECT '- Receptai: ' || COUNT(*) FROM prescriptions
-UNION ALL SELECT '- Lab testai: ' || COUNT(*) FROM lab_tests
-UNION ALL SELECT '- Sąskaitos: ' || COUNT(*) FROM bills;
+UNION ALL
+SELECT '- Skyriai: ' || COUNT(*) FROM departments
+UNION ALL
+SELECT '- Darbuotojai: ' || COUNT(*) FROM employees
+UNION ALL
+SELECT '- Gydytojai: ' || COUNT(*) FROM doctors
+UNION ALL
+SELECT '- Seserys: ' || COUNT(*) FROM nurses
+UNION ALL
+SELECT '- Palatai: ' || COUNT(*) FROM rooms
+UNION ALL
+SELECT '- Lovos: ' || COUNT(*) FROM beds
+UNION ALL
+SELECT '- Pacientai: ' || COUNT(*) FROM patients
+UNION ALL
+SELECT '- Diagnozės: ' || COUNT(*) FROM diagnoses
+UNION ALL
+SELECT '- Vaistai: ' || COUNT(*) FROM medications
+UNION ALL
+SELECT '- Vizitai: ' || COUNT(*) FROM appointments
+UNION ALL
+SELECT '- Priėmimai: ' || COUNT(*) FROM admissions
+UNION ALL
+SELECT '- Pacientų diagnozės: ' || COUNT(*) FROM patient_diagnoses
+UNION ALL
+SELECT '- Receptai: ' || COUNT(*) FROM prescriptions
+UNION ALL
+SELECT '- Lab testai: ' || COUNT(*) FROM lab_tests
+UNION ALL
+SELECT '- Sąskaitos: ' || COUNT(*) FROM bills;
 
 COMMIT;
