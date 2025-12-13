@@ -86,8 +86,6 @@ CREATE TABLE employees (
     CONSTRAINT uk_emp_email UNIQUE (email),
     CONSTRAINT chk_emp_gender CHECK (gender IN ('M', 'F', 'O')),
     CONSTRAINT chk_emp_status CHECK (employment_status IN ('ACTIVE', 'ON_LEAVE', 'TERMINATED')),
-    CONSTRAINT chk_emp_dob CHECK (date_of_birth < SYSDATE),
-    CONSTRAINT chk_emp_hire CHECK (hire_date <= SYSDATE),
     CONSTRAINT chk_emp_salary CHECK (salary >= 0)
 );
 
@@ -235,8 +233,7 @@ CREATE TABLE patients (
     CONSTRAINT pk_patients PRIMARY KEY (patient_id),
     CONSTRAINT chk_pat_gender CHECK (gender IN ('M', 'F', 'O')),
     CONSTRAINT chk_pat_blood CHECK (blood_type IN ('A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-', NULL)),
-    CONSTRAINT chk_pat_active CHECK (is_active IN ('Y', 'N')),
-    CONSTRAINT chk_pat_dob CHECK (date_of_birth < SYSDATE)
+    CONSTRAINT chk_pat_active CHECK (is_active IN ('Y', 'N'))
 );
 
 CREATE INDEX idx_pat_name ON patients(last_name, first_name);
@@ -272,15 +269,14 @@ CREATE TABLE appointments (
         REFERENCES doctors(doctor_id),
     CONSTRAINT chk_appt_type CHECK (appointment_type IN ('CHECKUP', 'CONSULTATION', 'FOLLOWUP', 'EMERGENCY')),
     CONSTRAINT chk_appt_status CHECK (status IN ('SCHEDULED', 'CONFIRMED', 'COMPLETED', 'CANCELLED', 'NO_SHOW')),
-    CONSTRAINT chk_appt_duration CHECK (duration_minutes BETWEEN 15 AND 240),
-    CONSTRAINT chk_appt_date CHECK (appointment_date >= TRUNC(SYSDATE) - 30) -- ne senesni nei 30 dienų
+    CONSTRAINT chk_appt_duration CHECK (duration_minutes BETWEEN 15 AND 240)
 );
 
 CREATE INDEX idx_appt_patient ON appointments(patient_id);
 CREATE INDEX idx_appt_doctor ON appointments(doctor_id);
 CREATE INDEX idx_appt_date ON appointments(appointment_date);
 CREATE INDEX idx_appt_status ON appointments(status);
-CREATE INDEX idx_appt_doc_date ON appointments(doctor_id, appointment_date); -- composite
+CREATE INDEX idx_appt_doc_date ON appointments(doctor_id, appointment_date);
 
 COMMENT ON TABLE appointments IS 'Pacientų vizitai pas gydytojus';
 COMMENT ON COLUMN appointments.appointment_time IS 'Vizito laikas formatu HH24:MI (pvz., 14:30)';
@@ -342,7 +338,6 @@ CREATE TABLE diagnoses (
     CONSTRAINT chk_diag_severity CHECK (severity_level IN ('MILD', 'MODERATE', 'SEVERE', 'CRITICAL', NULL))
 );
 
-CREATE INDEX idx_diag_code ON diagnoses(diagnosis_code);
 CREATE INDEX idx_diag_category ON diagnoses(category);
 CREATE INDEX idx_diag_active ON diagnoses(is_active);
 
@@ -538,7 +533,7 @@ CREATE TABLE bills (
     CONSTRAINT chk_bill_paid CHECK (paid_amount >= 0),
     CONSTRAINT chk_bill_discount CHECK (discount_percent >= 0 AND discount_percent <= 100),
     CONSTRAINT chk_bill_dates CHECK (due_date >= bill_date),
-    CONSTRAINT chk_bill_source CHECK (NOT (admission_id IS NOT NULL AND appointment_id IS NOT NULL)) -- tik vienas gali būti
+    CONSTRAINT chk_bill_source CHECK (NOT (admission_id IS NOT NULL AND appointment_id IS NOT NULL))
 );
 
 CREATE INDEX idx_bill_patient ON bills(patient_id);
@@ -559,8 +554,8 @@ COMMENT ON COLUMN bills.appointment_id IS 'Sąskaita už vizitą (jei taikoma)';
 
 -- Informacija apie sukurtas lenteles
 SELECT 'Sukurta ' || COUNT(*) || ' lentelių' AS info
-FROM user_tables
-WHERE table_name IN (
+  FROM user_tables
+ WHERE table_name IN (
     'BILLS', 'LAB_TESTS', 'PRESCRIPTIONS', 'PATIENT_DIAGNOSES',
     'APPOINTMENTS', 'ADMISSIONS', 'DIAGNOSES', 'MEDICATIONS',
     'BEDS', 'ROOMS', 'NURSES', 'DOCTORS', 'EMPLOYEES',
@@ -569,13 +564,13 @@ WHERE table_name IN (
 
 -- Informacija apie sukurtus indexus
 SELECT 'Sukurta ' || COUNT(*) || ' indeksų' AS info
-FROM user_indexes
-WHERE table_name IN (
+  FROM user_indexes
+ WHERE table_name IN (
     'BILLS', 'LAB_TESTS', 'PRESCRIPTIONS', 'PATIENT_DIAGNOSES',
     'APPOINTMENTS', 'ADMISSIONS', 'DIAGNOSES', 'MEDICATIONS',
     'BEDS', 'ROOMS', 'NURSES', 'DOCTORS', 'EMPLOYEES',
     'DEPARTMENTS', 'PATIENTS'
 )
-AND index_name NOT LIKE 'SYS_%';
+   AND index_name NOT LIKE 'SYS_%';
 
 COMMIT;
