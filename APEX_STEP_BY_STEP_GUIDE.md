@@ -1066,24 +1066,42 @@ SELECT e.first_name || ' ' || e.last_name || ' (' || d.specialization || ')' AS 
 
 ---
 
-## 2. HOME PAGE (REQ 1)
+## 2. HOME PAGE (DASHBOARD) - REQ 1
+
+**Tikslas:** Sukurti pagrindinį puslapį (Dashboard), kuriame bus:
+- **Navigacinės kortelės** (Cards) su nuorodomis į kitus puslapius
+- **KPI statistika** (pacientų skaičius, vizitai šiandien, hospitalizuoti, neapmokėtos sąskaitos)
+
+---
 
 ### Page 1: Dashboard
 
-**Kaip sukurti:**
-1. **Edit Page 1** (jau egzistuoja po f10100.sql import)
-2. **Page Designer** → Dešinėje pusėje matai tuščią page
-3. Pridėsime: Dashboard Cards + KPI Statistics
+**Kaip patekti į Page Designer:**
+
+1. **Application Home** lange paspauskite puslapį **1 - Home**
+2. Atsidarys **Page Designer** (trys sekcijos: kairėje - Rendering Tree, viduryje - Layout, dešinėje - Property Editor)
+
+**Kas bus sukurta:**
+- Region su Cards (navigacinės kortelės)
+- Application Items (globalūs kintamieji statistikai)
+- Page Process (PL/SQL kodas, kuris skaičiuoja statistiką)
+
+---
 
 ### 2.1 Pridėti Dashboard Cards Region
 
-**Žingsniai:**
-1. **Right-click** ant **Body** → **Create Region**
-2. **Title:** Sistemos Meniu
-3. **Type:** Cards
-4. **Source:**
-   - **Type:** SQL Query
-   - **SQL Query:**
+**Sukūrimo žingsniai:**
+
+1. **Rendering Tree** (kairė pusė) → dešiniuoju pelės mygtuku paspauskite **Body**
+2. Išsirinkite **Create Region**
+
+3. **Property Editor** (dešinė pusė) → **Identification** sekcijoje:
+   - **Title:** įrašykite `Sistemos Meniu`
+   - **Type:** pasirinkite **Cards**
+
+4. **Property Editor** → **Source** sekcijoje:
+   - **Type:** pasirinkite **SQL Query**
+   - **SQL Query:** įterpkite šią SQL užklausą:
 ```sql
 SELECT 'Pacientai' AS title,
        'Pacientų registras ir istorijos' AS description,
@@ -1122,22 +1140,84 @@ SELECT 'Vaistai' AS title,
   FROM dual
 ```
 
-4. **Attributes:**
-   - **Title Column:** TITLE
-   - **Body Column:** DESCRIPTION
-   - **Icon CSS Classes Column:** ICON_CSS_CLASS
-   - **Card Link Column:** CARD_LINK
-5. **Save**
+**SQL paaiškinimas:**
+- `UNION ALL` sujungia 6 atskiras korteles
+- `apex_page.get_url()` generuoja nuorodas į kitus puslapius
+- `fa-users`, `fa-calendar` - Font Awesome ikonų klasės
+- Kiekviena kortelė turi: pavadinimą, aprašymą, ikoną ir nuorodą
+
+5. **Property Editor** → **Attributes** sekcijoje:
+   - Išskleidžiant **Attributes** skiltį, pamatysite kortelių konfigūraciją
+   - **Title:** → **Column:** pasirinkite **TITLE**
+   - **Body:** → **Column:** pasirinkite **DESCRIPTION**
+   - **Icon and Badge:** → **Icon Source:** pasirinkite **Icon CSS Classes**
+   - **Icon CSS Classes:** → **Column:** pasirinkite **ICON_CSS_CLASS**
+   - **Card:** → **Primary Key Column 1:** pasirinkite **CARD_LINK**
+
+6. **Property Editor** → **Attributes** → **Card** sekcijoje:
+   - **Link Target:** paspauskite mygtuką dešinėje
+   - Atsidarys **Link Builder** dialogas
+   - **Type:** pasirinkite **URL**
+   - **URL:** įrašykite `#CARD_LINK#`
+   - Paspauskite **OK**
+
+7. **Toolbar** viršuje → paspauskite **Save** mygtuką
+
+**✅ Dashboard Cards Region sukurtas!**
 
 ---
 
-### 2.2 Pridėti KPI Statistics Region
+### 2.2 Pridėti Application Items (Globalūs Kintamieji)
 
-**Žingsniai:**
-1. **Right-click** ant **Body** → **Create Region**
-2. **Title:** Statistika
-3. **Type:** Static Content
-4. **Source:**
+**Pirma reikia sukurti Application Items, kurie saugos statistikos duomenis.**
+
+**Sukūrimo žingsniai:**
+
+1. **Page Designer** → viršutinėje navigacijoje paspauskite **Shared Components**
+2. **Application Logic** sekcijoje paspauskite **Application Items**
+3. Paspauskite **Create** mygtuką
+
+4. Sukurkite 4 Application Items po vieną:
+
+**Application Item #1:**
+- **Name:** `PATIENT_COUNT`
+- **Scope:** Application
+- Paspauskite **Create Application Item**
+
+**Application Item #2:**
+- **Name:** `APPOINTMENT_COUNT`
+- **Scope:** Application
+- Paspauskite **Create Application Item**
+
+**Application Item #3:**
+- **Name:** `ADMISSION_COUNT`
+- **Scope:** Application
+- Paspauskite **Create Application Item**
+
+**Application Item #4:**
+- **Name:** `UNPAID_BILLS`
+- **Scope:** Application
+- Paspauskite **Create Application Item**
+
+5. Grįžkite į **Page 1** (paspauskite **Application** → **1 - Home**)
+
+**✅ Application Items sukurti!**
+
+---
+
+### 2.3 Pridėti KPI Statistics Region
+
+**Sukūrimo žingsniai:**
+
+1. **Rendering Tree** (kairė pusė) → dešiniuoju pelės mygtuku paspauskite **Body**
+2. Išsirinkite **Create Region**
+
+3. **Property Editor** (dešinė pusė) → **Identification** sekcijoje:
+   - **Title:** įrašykite `Statistika`
+   - **Type:** pasirinkite **Static Content**
+
+4. **Property Editor** → **Source** sekcijoje:
+   - **HTML Code:** įterpkite šį HTML kodą:
 ```html
 <div class="apex-stats">
     <div class="stat-box">
@@ -1159,10 +1239,33 @@ SELECT 'Vaistai' AS title,
 </div>
 ```
 
-5. **Processing** → **Before Header** → **Create Process**
-6. **Name:** Load Statistics
-7. **Type:** Execute Code
-8. **PL/SQL Code:**
+**HTML paaiškinimas:**
+- `&PATIENT_COUNT.` - Application Item sintaksė (automatiškai įstatoma reikšmė)
+- `<div class="stat-box">` - CSS klasė statistikos kortelėms
+- Rodomos 4 statistikos: pacientai, vizitai, hospitalizuoti, neapmokėtos sąskaitos
+
+5. **Toolbar** viršuje → paspauskite **Save** mygtuką
+
+**✅ KPI Statistics Region sukurtas!**
+
+---
+
+### 2.4 Pridėti Page Process (Statistikos Skaičiavimas)
+
+**Dabar reikia sukurti procesą, kuris apskaičiuos statistiką ir išsaugos ją Application Items.**
+
+**Sukūrimo žingsniai:**
+
+1. **Rendering Tree** (kairė pusė) → perjunkite į **Processing** tab (viršuje)
+2. Dešiniuoju pelės mygtuku paspauskite **Processing** sekciją
+3. Išsirinkite **Create Process**
+
+4. **Property Editor** (dešinė pusė) → **Identification** sekcijoje:
+   - **Name:** įrašykite `Load Statistics`
+   - **Type:** pasirinkite **Execute Code**
+
+5. **Property Editor** → **Source** sekcijoje:
+   - **PL/SQL Code:** įterpkite šį PL/SQL kodą:
 ```sql
 DECLARE
     v_patient_count NUMBER;
@@ -1191,28 +1294,69 @@ BEGIN
 END;
 ```
 
-9. **Shared Components** → **Application Items** → **Create:**
-   - PATIENT_COUNT
-   - APPOINTMENT_COUNT
-   - ADMISSION_COUNT
-   - UNPAID_BILLS
+**PL/SQL paaiškinimas:**
+- `DECLARE` - kintamųjų deklaracija
+- `SELECT COUNT(*) INTO` - apskaičiuoja ir išsaugo reikšmę
+- `TRUNC(SYSDATE)` - šiandienos data be laiko
+- `apex_util.set_session_state()` - išsaugo reikšmę į Application Item
 
-**✅ REQ 1: Home page su navigacija SUKURTAS**
+6. **Property Editor** → **Settings** sekcijoje:
+   - **Point:** pasirinkite **Before Header**
+   - Tai užtikrina, kad statistika bus apskaičiuota prieš rodant puslapį
+
+7. **Toolbar** viršuje → paspauskite **Save** mygtuką
+
+**✅ Page Process sukurtas!**
 
 ---
 
-## 3. PATIENTS INTERACTIVE REPORT + FORM (REQ 3)
+### 2.5 Testuoti Dashboard Puslapį
 
-### Page 101: Patients Interactive Report
+**Testavimo žingsniai:**
 
-**Kaip sukurti:**
-1. **Create Page** → **Report** → **Interactive Report**
-2. **Page Name:** Pacientai
-3. **Page Number:** 101
-4. **Navigation:** Breadcrumb
-5. **Source:**
-   - **Table/View Name:** V_PATIENTS_FULL (VIEW su statistika)
-   - **arba SQL Query:**
+1. **Toolbar** viršuje → paspauskite **Run Page** mygtuką (▶)
+2. Prisijunkite prie aplikacijos (jei dar neprisijungę)
+3. Turėtumėte matyti:
+   - **6 korteles** su navigacija (Pacientai, Vizitai, Gydytojai, Sąskaitos, Priėmimai, Vaistai)
+   - **4 statistikas** viršuje (pacientų skaičius, vizitai šiandien, hospitalizuoti, neapmokėtos sąskaitos)
+4. Paspauskite bet kurią kortelę ir patikrinkite, ar nukreipia į atitinkamą puslapį
+
+**✅ REQ 1: Home Page (Dashboard) su navigacija ir statistika SUKURTAS SĖKMINGAI!**
+
+---
+
+## 3. PACIENTŲ INTERACTIVE REPORT + FORM (REQ 3)
+
+**Tikslas:** Sukurti du puslapius:
+- **Page 101:** Interactive Report su pacientų sąrašu (su 2+ filtrais)
+- **Page 102:** Paciento formas (CRUD operacijos)
+
+**Naudojamas VIEW:** `V_PATIENTS_FULL` (turi pilną paciento informaciją + statistiką)
+
+---
+
+### Page 101: Pacientų Interactive Report
+
+**Sukūrimo žingsniai naudojant Create Page Wizard:**
+
+1. **Application Home** lange paspauskite **Create Page** mygtuką
+2. Pasirinkite **Report**
+3. Pasirinkite **Interactive Report**
+
+4. **Page Attributes** lange:
+   - **Page Number:** įrašykite `101`
+   - **Name:** įrašykite `Pacientai`
+   - **Page Mode:** pasirinkite **Normal**
+   - Paspauskite **Next**
+
+5. **Navigation** lange:
+   - **Breadcrumb:** pasirinkite **Breadcrumb**
+   - **Parent Entry:** pasirinkite **Home** (puslapį 1)
+   - Paspauskite **Next**
+
+6. **Report Source** lange:
+   - **Source Type:** pasirinkite **SQL Query**
+   - **SQL Query:** įterpkite šią SQL užklausą:
 ```sql
 SELECT patient_id,
        full_name AS "Vardas Pavardė",
@@ -1230,36 +1374,94 @@ SELECT patient_id,
  ORDER BY last_name, first_name
 ```
 
-6. **Include Form Page:** Yes (sukurs Page 102 automatiškai)
-7. **Primary Key:** PATIENT_ID
-8. **Create**
+**SQL paaiškinimas:**
+- Naudojamas `V_PATIENTS_FULL` VIEW su computed stulpeliais
+- Visi column headers lietuvių kalba (naudojant alias `AS "..."`)
+- VIEW turi `full_name`, `age`, `gender_display` computed laukus
 
-**Interactive Report Filters:**
+7. Paspauskite **Next**
 
-Po sukūrimo, **Edit Page 101**:
-1. **Edit Region "Pacientai"**
-2. **Search Bar:** Yes
-3. **Toolbar:**
-   - **Actions:** Yes
-   - **Download:** Yes (CSV, PDF)
-   - **Save Report:** Yes
+8. **Link Column** lange:
+   - **Link Column:** pasirinkite **Link to Custom Target**
+   - **Target:** paspauskite mygtuką dešinėje
+   - **Link Builder** dialoge:
+     - **Page:** įrašykite `102`
+     - **Set Items:**
+       - **Name:** `P102_PATIENT_ID`
+       - **Value:** `#PATIENT_ID#`
+     - Paspauskite **OK**
+   - **Link Icon:** pasirinkite **Edit** (pieštukas)
+   - Paspauskite **Next**
 
-**Pridėti Filtrus:**
-1. **Right-click** ant region → **Create Page Item**
-2. **Name:** P101_SEARCH_NAME
-3. **Type:** Text Field
-4. **Label:** Paieška pagal vardą
-5. **Placement:** Region → Before Rows
+9. **Options** lange:
+   - **Include Form Page:** pasirinkite **Yes** (automatiškai sukurs Page 102)
+   - **Form Page Number:** palikite `102`
+   - **Form Page Name:** įrašykite `Paciento Forma`
+   - Paspauskite **Next**
 
-6. **Create Page Item**
-7. **Name:** P101_FILTER_GENDER
-8. **Type:** Select List
-9. **Label:** Lytis
-10. **List of Values:** LOV_GENDER
-11. **Display Null Value:** Yes
-12. **Null Display Value:** Visi
+10. **Primary Key** lange:
+    - **Primary Key Column 1:** pasirinkite **PATIENT_ID**
+    - Paspauskite **Create**
 
-13. **Edit Region "Pacientai"** → **Source** → **SQL Query:**
+**✅ Interactive Report ir Form puslapiai sukurti!**
+
+---
+
+### 3.1 Pridėti Filtrus į Interactive Report (REQ 3)
+
+**Dabar reikia pridėti mažiausiai 2 filtrus prie Interactive Report.**
+
+**Kaip patekti į Page 101 redagavimą:**
+
+1. **Application Home** → paspauskite **101 - Pacientai**
+2. Atsidarys **Page Designer**
+
+**Filtras #1: Paieška pagal vardą/pavardę**
+
+**Sukūrimo žingsniai:**
+
+1. **Rendering Tree** → dešiniuoju pelės mygtuku paspauskite **Pacientai** region
+2. Išsirinkite **Create Page Item**
+
+3. **Property Editor** → **Identification** sekcijoje:
+   - **Name:** įrašykite `P101_SEARCH_NAME`
+   - **Type:** pasirinkite **Text Field**
+
+4. **Property Editor** → **Label** sekcijoje:
+   - **Label:** įrašykite `Paieška pagal vardą`
+
+5. **Property Editor** → **Layout** sekcijoje:
+   - **Position:** pasirinkite **Before Region** arba **Region Body** (priklausomai nuo APEX versijos)
+
+6. **Toolbar** → **Save**
+
+**Filtras #2: Filtras pagal lytį**
+
+**Sukūrimo žingsniai:**
+
+1. **Rendering Tree** → dešiniuoju pelės mygtuku paspauskite **Pacientai** region
+2. Išsirinkite **Create Page Item**
+
+3. **Property Editor** → **Identification** sekcijoje:
+   - **Name:** įrašykite `P101_FILTER_GENDER`
+   - **Type:** pasirinkite **Select List**
+
+4. **Property Editor** → **Label** sekcijoje:
+   - **Label:** įrašykite `Lytis`
+
+5. **Property Editor** → **List of Values** sekcijoje:
+   - **Type:** pasirinkite **Shared Component**
+   - **List of Values:** pasirinkite **LOV_GENDER**
+   - **Display Extra Values:** pasirinkite **No**
+   - **Display Null Value:** pasirinkite **Yes**
+   - **Null Display Value:** įrašykite `- Visi -`
+
+6. **Toolbar** → **Save**
+
+**Modifikuoti SQL užklausą su filtrais:**
+
+1. **Rendering Tree** → pasirinkite **Pacientai** region
+2. **Property Editor** → **Source** sekcijoje → **SQL Query:**
 ```sql
 SELECT patient_id,
        full_name AS "Vardas Pavardė",
@@ -1280,47 +1482,98 @@ SELECT patient_id,
  ORDER BY last_name, first_name
 ```
 
-14. **Page Items to Submit:** P101_SEARCH_NAME,P101_FILTER_GENDER
+**SQL paaiškinimas:**
+- `:P101_SEARCH_NAME IS NULL OR` - jei paieškos laukas tuščias, rodo visus
+- `UPPER(full_name) LIKE '%' || UPPER(:P101_SEARCH_NAME) || '%'` - case-insensitive paieška
+- `:P101_FILTER_GENDER IS NULL OR gender = :P101_FILTER_GENDER` - filtras pagal lytį
 
-**✅ Interactive Report su 2+ filters SUKURTAS**
+3. **Property Editor** → **Source** sekcijoje → **Page Items to Submit:**
+   - Įrašykite: `P101_SEARCH_NAME,P101_FILTER_GENDER`
+   - Tai užtikrina, kad filtrai bus naudojami SQL užklausoje
+
+4. **Toolbar** → **Save**
+
+**✅ Interactive Report su 2 filtrais sukurtas!**
 
 ---
 
-### Page 102: Patient Form (CRUD)
+### 3.2 Customizuoti Page 102: Paciento Forma (CRUD)
 
-**Automatiškai sukurta su Page 101, bet reikia customize:**
+**Page 102 automatiškai sukurtas su Page 101, bet reikia pritaikyti:**
 
-1. **Edit Page 102**
-2. **Pakeisti Items į LOVs:**
+**Kaip patekti į Page 102 redagavimą:**
 
-**P102_GENDER:**
-- **Type:** Radio Group
-- **List of Values:** LOV_GENDER
-- **Display Null Value:** No
+1. **Application Home** → paspauskite **102 - Paciento Forma**
+2. Atsidarys **Page Designer**
 
-**P102_BLOOD_TYPE:**
-- **Type:** Select List
-- **List of Values:** LOV_BLOOD_TYPE
-- **Display Null Value:** Yes
+**Kas bus modifikuota:**
+- Pakeisti Text Fields į LOVs (Lytis, Kraujo grupė, Aktyvumas)
+- Pakeisti Label tekstus į lietuvių kalbą
+- Pridėti validacijas (el. paštas, telefonas)
 
-**P102_IS_ACTIVE:**
-- **Type:** Radio Group
-- **List of Values:** Static (Y=Aktyvus, N=Neaktyvus)
+---
 
-3. **Pakeisti Labels į lietuvių kalbą:**
-   - P102_FIRST_NAME → Vardas
-   - P102_LAST_NAME → Pavardė
-   - P102_DATE_OF_BIRTH → Gimimo data
-   - P102_GENDER → Lytis
-   - P102_BLOOD_TYPE → Kraujo grupė
-   - P102_EMAIL → El. paštas
-   - P102_PHONE_NUMBER → Telefonas
-   - P102_EMERGENCY_CONTACT_NAME → Artimojo vardas
-   - P102_EMERGENCY_CONTACT_PHONE → Artimojo telefonas
-   - P102_ADDRESS → Adresas
-   - P102_CITY → Miestas
-   - P102_POSTAL_CODE → Pašto kodas
-   - P102_INSURANCE_NUMBER → Draudimo numeris
+**Modifikacija #1: P102_GENDER į Radio Group**
+
+1. **Rendering Tree** → pasirinkite **P102_GENDER**
+2. **Property Editor** → **Identification** sekcijoje:
+   - **Type:** pasirinkite **Radio Group**
+3. **Property Editor** → **Label** sekcijoje:
+   - **Label:** pakeiskite į `Lytis`
+4. **Property Editor** → **List of Values** sekcijoje:
+   - **Type:** pasirinkite **Shared Component**
+   - **List of Values:** pasirinkite **LOV_GENDER**
+   - **Display Null Value:** pasirinkite **No**
+5. **Property Editor** → **Validation** sekcijoje:
+   - **Value Required:** pasirinkite **Yes**
+6. **Toolbar** → **Save**
+
+**Modifikacija #2: P102_BLOOD_TYPE į Select List**
+
+1. **Rendering Tree** → pasirinkite **P102_BLOOD_TYPE**
+2. **Property Editor** → **Identification** sekcijoje:
+   - **Type:** pasirinkite **Select List**
+3. **Property Editor** → **Label** sekcijoje:
+   - **Label:** pakeiskite į `Kraujo grupė`
+4. **Property Editor** → **List of Values** sekcijoje:
+   - **Type:** pasirinkite **Shared Component**
+   - **List of Values:** pasirinkite **LOV_BLOOD_TYPE**
+   - **Display Null Value:** pasirinkite **Yes**
+   - **Null Display Value:** įrašykite `- Nežinoma -`
+5. **Toolbar** → **Save**
+
+**Modifikacija #3: P102_IS_ACTIVE į Radio Group**
+
+1. **Rendering Tree** → pasirinkite **P102_IS_ACTIVE**
+2. **Property Editor** → **Identification** sekcijoje:
+   - **Type:** pasirinkite **Radio Group**
+3. **Property Editor** → **Label** sekcijoje:
+   - **Label:** pakeiskite į `Statusas`
+4. **Property Editor** → **List of Values** sekcijoje:
+   - **Type:** pasirinkite **Static Values**
+   - Paspauskite **List of Values** lauką, atsidarys dialogas
+   - Įveskite:
+     - **Display Value:** `Aktyvus` | **Return Value:** `Y`
+     - **Display Value:** `Neaktyvus` | **Return Value:** `N`
+   - Paspauskite **OK**
+   - **Display Null Value:** pasirinkite **No**
+5. **Toolbar** → **Save**
+
+**Modifikacija #4: Pakeisti visų laukų Labels į lietuvių kalbą**
+
+Paeiliui kiekvienam laukui pakeiskite **Label** į lietuvių kalbą:
+
+- **P102_FIRST_NAME** → Label: `Vardas`
+- **P102_LAST_NAME** → Label: `Pavardė`
+- **P102_DATE_OF_BIRTH** → Label: `Gimimo data`
+- **P102_EMAIL** → Label: `El. paštas`
+- **P102_PHONE_NUMBER** → Label: `Telefonas`
+- **P102_EMERGENCY_CONTACT_NAME** → Label: `Artimojo vardas`
+- **P102_EMERGENCY_CONTACT_PHONE** → Label: `Artimojo telefonas`
+- **P102_ADDRESS** → Label: `Adresas`
+- **P102_CITY** → Label: `Miestas`
+- **P102_POSTAL_CODE** → Label: `Pašto kodas`
+- **P102_INSURANCE_NUMBER** → Label: `Draudimo numeris`
 
 4. **Save**
 
