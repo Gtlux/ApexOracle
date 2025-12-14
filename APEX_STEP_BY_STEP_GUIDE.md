@@ -1,245 +1,612 @@
-# 🏥 APEX PUSLAPIŲ KŪRIMO VADOVAS - Step by Step
+# 🏥 LIGONINĖS VALDYMO SISTEMA - APEX Aplikacijos Kūrimas
 
-**Application ID:** 10100
-**APEX Version:** 22.1.0
-**Database Schema:** STUD_581
+**Šiame vadove** naudojant žingsnis-po-žingsnio instrukcijas bus sukurta pilna Ligoninės Valdymo sistema Oracle APEX 22.1.0 aplinkoje.
+
+**Aplikacijos informacija:**
+- **Application ID:** 100
+- **Application Name:** Ligoninės Valdymo Sistema
+- **APEX Version:** 22.1.0
+- **Database Schema:** HOSPITAL_DB (arba jūsų schema)
 
 ---
 
 ## 📋 TURINYS
 
-1. [LOVs Kūrimas](#1-lovs-kūrimas-30-vnt)
-2. [Home Page (REQ 1)](#2-home-page-req-1)
-3. [Patients Report + Form (REQ 3)](#3-patients-interactive-report--form-req-3)
-4. [Patient Master-Detail (REQ 5)](#4-patient-master-detail-req-5)
-5. [Appointments Calendar (REQ 6)](#5-appointments-calendar-req-6)
-6. [Bills Report su VIEW (REQ 4)](#6-bills-report-su-view-req-4)
-7. [Doctors Report + Form](#7-doctors-report--form)
-8. [Likusieji Puslapiai](#8-likusieji-puslapiai)
-9. [Navigation Menu](#9-navigation-menu)
-10. [Validacijos](#10-validacijos)
+**Prieš Pradedant:**
+- [Aplikacijos Kūrimas](#pradinis-aplikacijos-kūrimas)
+- [Shared Components Setup](#shared-components-setup)
+
+**LOVs ir Shared Components:**
+1. [LOVs Kūrimas (30 vnt)](#1-lovs-kūrimas-30-vnt)
+
+**Puslapių Kūrimas (žingsnis-po-žingsnio):**
+2. [Home Page - Dashboard (REQ 1)](#2-home-page-dashboard-req-1)
+3. [Pacientų Interactive Report + Form (REQ 3)](#3-pacientų-interactive-report--form-req-3)
+4. [Paciento Master-Detail Profilis (REQ 5)](#4-paciento-master-detail-profilis-req-5)
+5. [Vizitų Kalendorius (REQ 6)](#5-vizitų-kalendorius-req-6)
+6. [Sąskaitų Report su VIEW (REQ 4)](#6-sąskaitų-report-su-view-req-4)
+7. [Gydytojų Report + Form](#7-gydytojų-report--form)
+8. [Priėmimų (Admissions) Valdymas](#8-priėmimų-admissions-valdymas)
+9. [Receptų (Prescriptions) Valdymas](#9-receptų-prescriptions-valdymas)
+10. [Lovų Užimtumo Vaizdas](#10-lovų-užimtumo-vaizdas)
+
+**Patobulinimai:**
+11. [Navigation Menu Konfigūracija](#11-navigation-menu-konfigūracija)
+12. [Validacijos ir Business Logic](#12-validacijos-ir-business-logic)
+13. [Dynamic Actions](#13-dynamic-actions)
+
+---
+
+## PRADINIS APLIKACIJOS KŪRIMAS
+
+### Naujos aplikacijos sukūrimas naudojant Create Application Wizard
+
+Naudojant "Create Application Wizard" galima sukurti skirtingų tipų puslapius, pvz., "Report", "Form", "Master-Detail".
+
+**Puslapių tipai:**
+- **Report (Ataskaitos)** - puslapiai, kuriuose rodomas lentelės turinys (be redagavimo galimybės).
+- **Form (Formos)** - leidžia vartotojams keisti lentelės turinį, pvz. įterpti naują įrašą arba pakeisti esamą įrašą.
+- **Master-Detail formos** - tuo pačiu metu rodo daugiau nei vieną lentelę, dažniausiai lentelės parenkamos taip, kad tarp šių lentelių įrašų būtų ryšys "vienas su daug".
+
+**Aplikacijos sukūrimas:**
+
+1. Paspauskite **App Builder** ir pasirinkite **Create**. Atsidarys vedlio langas.
+2. Pasirinkite **New Application**.
+3. **Create an Application** lange:
+   - **Name:** įrašykite `Ligoninės Valdymo Sistema`
+   - **Appearance:** pasirinkite **Vita** arba **Universal Theme 42**
+
+4. Šiame etape **NESPAUSKITE** "Add Page" - mes kursime puslapius kiekvieną atskirai naudodami detalias instrukcijas.
+
+5. Spustelėkite **Create Application** mygtuką ir patvirtinkite aplikacijos kūrimą.
+
+6. Įsitikinkite, kad sukurtos aplikacijos sąraše yra pradinis puslapis (Page 1 - Home).
+
+---
+
+## SHARED COMPONENTS SETUP
+
+Prieš kuriant puslapius, reikia sukurti bendrus komponentus (Shared Components), kurie bus naudojami visoje aplikacijoje.
 
 ---
 
 ## 1. LOVs KŪRIMAS (30 VNT)
 
-### Kaip patekti:
-```
-App Builder → Application 10100 → Shared Components → List of Values → Create
-```
+### Kaip patekti į LOV kūrimo langą:
+
+1. Aplikacijos pagrindiniame lange (Application Home Page) paspauskite **Shared Components**
+2. Sekcijoje **Other Components** paspauskite **List of Values**
+3. Paspauskite **Create** mygtuką
+
+---
 
 ### 1.1 STATIC LOVs (14 vnt)
 
-#### **LOV_GENDER**
-```
-Name: LOV_GENDER
-Type: Static
-Values:
-  Display Value    | Return Value
-  ─────────────────┼─────────────
-  Vyras           | M
-  Moteris         | F
-  Kita            | O
-```
-
-**Kaip sukurti:**
-1. **Create** → **From Scratch** → **Static**
-2. **Name:** LOV_GENDER
-3. **Static Values:**
-   - Click **Add Entry**
-   - Display Value: `Vyras`, Return Value: `M`
-   - Click **Add Entry**
-   - Display Value: `Moteris`, Return Value: `F`
-   - Click **Add Entry**
-   - Display Value: `Kita`, Return Value: `O`
-4. **Create**
+Static LOVs - tai fiksuotos reikšmės, kurios nesikeičia ir nėra gaunamos iš duomenų bazės lentelių.
 
 ---
 
-#### **LOV_BLOOD_TYPE**
-```
-Name: LOV_BLOOD_TYPE
-Type: Static
-Values:
-  A+ | A+
-  A- | A-
-  B+ | B+
-  B- | B-
-  AB+ | AB+
-  AB- | AB-
-  O+ | O+
-  O- | O-
-```
+#### **LOV_GENDER** (Lyties pasirinkimas)
+
+**Sukūrimo žingsniai:**
+
+1. **List of Values** lange paspauskite **Create** mygtuką
+2. Pasirinkite **From Scratch** ir paspauskite **Next**
+3. **Create List of Values** lange:
+   - **Source:** pasirinkite **Static**
+   - Paspauskite **Next**
+
+4. **Name and Type** lange:
+   - **Name:** įrašykite `LOV_GENDER`
+   - **Type:** palikite **Static**
+
+5. **Static Values** sekcijoje kursite reikšmių poras (Display/Return):
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `1`
+   - **Display Value:** `Vyras`
+   - **Return Value:** `M`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `2`
+   - **Display Value:** `Moteris`
+   - **Return Value:** `F`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `3`
+   - **Display Value:** `Kita`
+   - **Return Value:** `O`
+
+6. Paspauskite **Create** mygtuką
+
+**✅ LOV_GENDER sukurtas!**
 
 ---
 
-#### **LOV_ROOM_TYPE**
-```
-Name: LOV_ROOM_TYPE
-Type: Static
-Values:
-  Vienvietė           | PRIVATE
-  Dvivietė            | SEMI_PRIVATE
-  Intensyvi priežiūra | ICU
-  Skubi pagalba       | EMERGENCY
-  Operacinė           | OPERATING
-```
+#### **LOV_BLOOD_TYPE** (Kraujo grupės)
+
+**Sukūrimo žingsniai:**
+
+1. **List of Values** lange paspauskite **Create** mygtuką
+2. Pasirinkite **From Scratch** ir paspauskite **Next**
+3. **Create List of Values** lange:
+   - **Source:** pasirinkite **Static**
+   - Paspauskite **Next**
+
+4. **Name and Type** lange:
+   - **Name:** įrašykite `LOV_BLOOD_TYPE`
+   - **Type:** palikite **Static**
+
+5. **Static Values** sekcijoje sukurkite visas 8 kraujo grupes:
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `1` | **Display Value:** `A+` | **Return Value:** `A+`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `2` | **Display Value:** `A-` | **Return Value:** `A-`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `3` | **Display Value:** `B+` | **Return Value:** `B+`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `4` | **Display Value:** `B-` | **Return Value:** `B-`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `5` | **Display Value:** `AB+` | **Return Value:** `AB+`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `6` | **Display Value:** `AB-` | **Return Value:** `AB-`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `7` | **Display Value:** `O+` | **Return Value:** `O+`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `8` | **Display Value:** `O-` | **Return Value:** `O-`
+
+6. Paspauskite **Create** mygtuką
+
+**✅ LOV_BLOOD_TYPE sukurtas!**
 
 ---
 
-#### **LOV_APPOINTMENT_TYPE**
-```
-Name: LOV_APPOINTMENT_TYPE
-Type: Static
-Values:
-  Patikrinimas  | CHECKUP
-  Konsultacija  | CONSULTATION
-  Pakartotinis  | FOLLOWUP
-  Skubūs        | EMERGENCY
-```
+#### **LOV_ROOM_TYPE** (Kambario tipas)
+
+**Sukūrimo žingsniai:**
+
+1. **List of Values** lange paspauskite **Create** mygtuką
+2. Pasirinkite **From Scratch** ir paspauskite **Next**
+3. **Create List of Values** lange:
+   - **Source:** pasirinkite **Static**
+   - Paspauskite **Next**
+
+4. **Name and Type** lange:
+   - **Name:** įrašykite `LOV_ROOM_TYPE`
+   - **Type:** palikite **Static**
+
+5. **Static Values** sekcijoje sukurkite kambario tipus:
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `1` | **Display Value:** `Vienvietė` | **Return Value:** `PRIVATE`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `2` | **Display Value:** `Dvivietė` | **Return Value:** `SEMI_PRIVATE`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `3` | **Display Value:** `Intensyvi priežiūra` | **Return Value:** `ICU`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `4` | **Display Value:** `Skubi pagalba` | **Return Value:** `EMERGENCY`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `5` | **Display Value:** `Operacinė` | **Return Value:** `OPERATING`
+
+6. Paspauskite **Create** mygtuką
+
+**✅ LOV_ROOM_TYPE sukurtas!**
 
 ---
 
-#### **LOV_APPOINTMENT_STATUS**
-```
-Name: LOV_APPOINTMENT_STATUS
-Type: Static
-Values:
-  Suplanuotas | SCHEDULED
-  Patvirtintas | CONFIRMED
-  Įvykęs | COMPLETED
-  Atšauktas | CANCELLED
-  Neatvyko | NO_SHOW
-```
+#### **LOV_APPOINTMENT_TYPE** (Vizito tipas)
+
+**Sukūrimo žingsniai:**
+
+1. **List of Values** lange paspauskite **Create** mygtuką
+2. Pasirinkite **From Scratch** ir paspauskite **Next**
+3. **Create List of Values** lange:
+   - **Source:** pasirinkite **Static**
+   - Paspauskite **Next**
+
+4. **Name and Type** lange:
+   - **Name:** įrašykite `LOV_APPOINTMENT_TYPE`
+   - **Type:** palikite **Static**
+
+5. **Static Values** sekcijoje sukurkite vizitų tipus:
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `1` | **Display Value:** `Patikrinimas` | **Return Value:** `CHECKUP`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `2` | **Display Value:** `Konsultacija` | **Return Value:** `CONSULTATION`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `3` | **Display Value:** `Pakartotinis` | **Return Value:** `FOLLOWUP`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `4` | **Display Value:** `Skubūs` | **Return Value:** `EMERGENCY`
+
+6. Paspauskite **Create** mygtuką
+
+**✅ LOV_APPOINTMENT_TYPE sukurtas!**
 
 ---
 
-#### **LOV_BED_STATUS**
-```
-Name: LOV_BED_STATUS
-Type: Static
-Values:
-  Laisva | AVAILABLE
-  Užimta | OCCUPIED
-  Remontas | MAINTENANCE
-  Rezervuota | RESERVED
-```
+#### **LOV_APPOINTMENT_STATUS** (Vizito būsena)
+
+**Sukūrimo žingsniai:**
+
+1. **List of Values** lange paspauskite **Create** mygtuką
+2. Pasirinkite **From Scratch** ir paspauskite **Next**
+3. **Create List of Values** lange:
+   - **Source:** pasirinkite **Static**
+   - Paspauskite **Next**
+
+4. **Name and Type** lange:
+   - **Name:** įrašykite `LOV_APPOINTMENT_STATUS`
+   - **Type:** palikite **Static**
+
+5. **Static Values** sekcijoje sukurkite vizitų būsenas:
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `1` | **Display Value:** `Suplanuotas` | **Return Value:** `SCHEDULED`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `2` | **Display Value:** `Patvirtintas` | **Return Value:** `CONFIRMED`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `3` | **Display Value:** `Įvykęs` | **Return Value:** `COMPLETED`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `4` | **Display Value:** `Atšauktas` | **Return Value:** `CANCELLED`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `5` | **Display Value:** `Neatvyko` | **Return Value:** `NO_SHOW`
+
+6. Paspauskite **Create** mygtuką
+
+**✅ LOV_APPOINTMENT_STATUS sukurtas!**
 
 ---
 
-#### **LOV_EMPLOYMENT_STATUS**
-```
-Name: LOV_EMPLOYMENT_STATUS
-Type: Static
-Values:
-  Dirba | ACTIVE
-  Atostogose | ON_LEAVE
-  Atleistas | TERMINATED
-```
+#### **LOV_BED_STATUS** (Lovos būsena)
+
+**Sukūrimo žingsniai:**
+
+1. **List of Values** lange paspauskite **Create** mygtuką
+2. Pasirinkite **From Scratch** ir paspauskite **Next**
+3. **Create List of Values** lange:
+   - **Source:** pasirinkite **Static**
+   - Paspauskite **Next**
+
+4. **Name and Type** lange:
+   - **Name:** įrašykite `LOV_BED_STATUS`
+   - **Type:** palikite **Static**
+
+5. **Static Values** sekcijoje sukurkite lovos būsenas:
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `1` | **Display Value:** `Laisva` | **Return Value:** `AVAILABLE`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `2` | **Display Value:** `Užimta` | **Return Value:** `OCCUPIED`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `3` | **Display Value:** `Remontas` | **Return Value:** `MAINTENANCE`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `4` | **Display Value:** `Rezervuota` | **Return Value:** `RESERVED`
+
+6. Paspauskite **Create** mygtuką
+
+**✅ LOV_BED_STATUS sukurtas!**
 
 ---
 
-#### **LOV_PAYMENT_STATUS**
-```
-Name: LOV_PAYMENT_STATUS
-Type: Static
-Values:
-  Neapmokėta | UNPAID
-  Dalinai | PARTIAL
-  Apmokėta | PAID
-  Vėluoja | OVERDUE
-```
+#### **LOV_EMPLOYMENT_STATUS** (Darbuotojo būsena)
+
+**Sukūrimo žingsniai:**
+
+1. **List of Values** lange paspauskite **Create** mygtuką
+2. Pasirinkite **From Scratch** ir paspauskite **Next**
+3. **Create List of Values** lange:
+   - **Source:** pasirinkite **Static**
+   - Paspauskite **Next**
+
+4. **Name and Type** lange:
+   - **Name:** įrašykite `LOV_EMPLOYMENT_STATUS`
+   - **Type:** palikite **Static**
+
+5. **Static Values** sekcijoje sukurkite darbuotojo būsenas:
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `1` | **Display Value:** `Dirba` | **Return Value:** `ACTIVE`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `2` | **Display Value:** `Atostogose` | **Return Value:** `ON_LEAVE`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `3` | **Display Value:** `Atleistas` | **Return Value:** `TERMINATED`
+
+6. Paspauskite **Create** mygtuką
+
+**✅ LOV_EMPLOYMENT_STATUS sukurtas!**
 
 ---
 
-#### **LOV_PAYMENT_METHOD**
-```
-Name: LOV_PAYMENT_METHOD
-Type: Static
-Values:
-  Grynais | CASH
-  Kortele | CARD
-  Draudimas | INSURANCE
-  Pervedimu | BANK_TRANSFER
-```
+#### **LOV_PAYMENT_STATUS** (Apmokėjimo būsena)
+
+**Sukūrimo žingsniai:**
+
+1. **List of Values** lange paspauskite **Create** mygtuką
+2. Pasirinkite **From Scratch** ir paspauskite **Next**
+3. **Create List of Values** lange:
+   - **Source:** pasirinkite **Static**
+   - Paspauskite **Next**
+
+4. **Name and Type** lange:
+   - **Name:** įrašykite `LOV_PAYMENT_STATUS`
+   - **Type:** palikite **Static**
+
+5. **Static Values** sekcijoje sukurkite apmokėjimo būsenas:
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `1` | **Display Value:** `Neapmokėta` | **Return Value:** `UNPAID`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `2` | **Display Value:** `Dalinai` | **Return Value:** `PARTIAL`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `3` | **Display Value:** `Apmokėta` | **Return Value:** `PAID`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `4` | **Display Value:** `Vėluoja` | **Return Value:** `OVERDUE`
+
+6. Paspauskite **Create** mygtuką
+
+**✅ LOV_PAYMENT_STATUS sukurtas!**
 
 ---
 
-#### **LOV_LAB_TEST_TYPE**
-```
-Name: LOV_LAB_TEST_TYPE
-Type: Static
-Values:
-  Kraujo tyrimas | BLOOD
-  Šlapimo tyrimas | URINE
-  Rentgenas | XRAY
-  MRI | MRI
-  CT | CT_SCAN
-  Echoskopija | ULTRASOUND
-  Elektrokardiograma | ECG
-  EEG | EEG
-  Biopsija | BIOPSY
-```
+#### **LOV_PAYMENT_METHOD** (Mokėjimo būdas)
+
+**Sukūrimo žingsniai:**
+
+1. **List of Values** lange paspauskite **Create** mygtuką
+2. Pasirinkite **From Scratch** ir paspauskite **Next**
+3. **Create List of Values** lange:
+   - **Source:** pasirinkite **Static**
+   - Paspauskite **Next**
+
+4. **Name and Type** lange:
+   - **Name:** įrašykite `LOV_PAYMENT_METHOD`
+   - **Type:** palikite **Static**
+
+5. **Static Values** sekcijoje sukurkite mokėjimo būdus:
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `1` | **Display Value:** `Grynais` | **Return Value:** `CASH`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `2` | **Display Value:** `Kortele` | **Return Value:** `CARD`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `3` | **Display Value:** `Draudimas` | **Return Value:** `INSURANCE`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `4` | **Display Value:** `Pervedimu` | **Return Value:** `BANK_TRANSFER`
+
+6. Paspauskite **Create** mygtuką
+
+**✅ LOV_PAYMENT_METHOD sukurtas!**
 
 ---
 
-#### **LOV_ADMISSION_TYPE**
-```
-Name: LOV_ADMISSION_TYPE
-Type: Static
-Values:
-  Skubaus | EMERGENCY
-  Planuotas | PLANNED
-  Perkėlimas | TRANSFER
-```
+#### **LOV_LAB_TEST_TYPE** (Laboratorinių tyrimų tipai)
+
+**Sukūrimo žingsniai:**
+
+1. **List of Values** lange paspauskite **Create** mygtuką
+2. Pasirinkite **From Scratch** ir paspauskite **Next**
+3. **Create List of Values** lange:
+   - **Source:** pasirinkite **Static**
+   - Paspauskite **Next**
+
+4. **Name and Type** lange:
+   - **Name:** įrašykite `LOV_LAB_TEST_TYPE`
+   - **Type:** palikite **Static**
+
+5. **Static Values** sekcijoje sukurkite laboratorinių tyrimų tipus:
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `1` | **Display Value:** `Kraujo tyrimas` | **Return Value:** `BLOOD`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `2` | **Display Value:** `Šlapimo tyrimas` | **Return Value:** `URINE`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `3` | **Display Value:** `Rentgenas` | **Return Value:** `XRAY`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `4` | **Display Value:** `MRI` | **Return Value:** `MRI`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `5` | **Display Value:** `CT` | **Return Value:** `CT_SCAN`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `6` | **Display Value:** `Echoskopija` | **Return Value:** `ULTRASOUND`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `7` | **Display Value:** `Elektrokardiograma` | **Return Value:** `ECG`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `8` | **Display Value:** `EEG` | **Return Value:** `EEG`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `9` | **Display Value:** `Biopsija` | **Return Value:** `BIOPSY`
+
+6. Paspauskite **Create** mygtuką
+
+**✅ LOV_LAB_TEST_TYPE sukurtas!**
 
 ---
 
-#### **LOV_ADMISSION_STATUS**
-```
-Name: LOV_ADMISSION_STATUS
-Type: Static
-Values:
-  Priimtas | ADMITTED
-  Išrašytas | DISCHARGED
-  Perkeltas | TRANSFERRED
-```
+#### **LOV_ADMISSION_TYPE** (Hospitalizacijos tipas)
+
+**Sukūrimo žingsniai:**
+
+1. **List of Values** lange paspauskite **Create** mygtuką
+2. Pasirinkite **From Scratch** ir paspauskite **Next**
+3. **Create List of Values** lange:
+   - **Source:** pasirinkite **Static**
+   - Paspauskite **Next**
+
+4. **Name and Type** lange:
+   - **Name:** įrašykite `LOV_ADMISSION_TYPE`
+   - **Type:** palikite **Static**
+
+5. **Static Values** sekcijoje sukurkite hospitalizacijos tipus:
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `1` | **Display Value:** `Skubaus` | **Return Value:** `EMERGENCY`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `2` | **Display Value:** `Planuotas` | **Return Value:** `PLANNED`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `3` | **Display Value:** `Perkėlimas` | **Return Value:** `TRANSFER`
+
+6. Paspauskite **Create** mygtuką
+
+**✅ LOV_ADMISSION_TYPE sukurtas!**
 
 ---
 
-#### **LOV_PRESCRIPTION_STATUS**
-```
-Name: LOV_PRESCRIPTION_STATUS
-Type: Static
-Values:
-  Aktyvus | ACTIVE
-  Užbaigtas | COMPLETED
-  Atšauktas | CANCELLED
-```
+#### **LOV_ADMISSION_STATUS** (Hospitalizacijos būsena)
+
+**Sukūrimo žingsniai:**
+
+1. **List of Values** lange paspauskite **Create** mygtuką
+2. Pasirinkite **From Scratch** ir paspauskite **Next**
+3. **Create List of Values** lange:
+   - **Source:** pasirinkite **Static**
+   - Paspauskite **Next**
+
+4. **Name and Type** lange:
+   - **Name:** įrašykite `LOV_ADMISSION_STATUS`
+   - **Type:** palikite **Static**
+
+5. **Static Values** sekcijoje sukurkite hospitalizacijos būsenas:
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `1` | **Display Value:** `Priimtas` | **Return Value:** `ADMITTED`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `2` | **Display Value:** `Išrašytas` | **Return Value:** `DISCHARGED`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `3` | **Display Value:** `Perkeltas` | **Return Value:** `TRANSFERRED`
+
+6. Paspauskite **Create** mygtuką
+
+**✅ LOV_ADMISSION_STATUS sukurtas!**
 
 ---
 
-#### **LOV_LAB_TEST_STATUS**
-```
-Name: LOV_LAB_TEST_STATUS
-Type: Static
-Values:
-  Užsakytas | ORDERED
-  Vykdomas | IN_PROGRESS
-  Baigtas | COMPLETED
-  Atšauktas | CANCELLED
-```
+#### **LOV_PRESCRIPTION_STATUS** (Recepto būsena)
+
+**Sukūrimo žingsniai:**
+
+1. **List of Values** lange paspauskite **Create** mygtuką
+2. Pasirinkite **From Scratch** ir paspauskite **Next**
+3. **Create List of Values** lange:
+   - **Source:** pasirinkite **Static**
+   - Paspauskite **Next**
+
+4. **Name and Type** lange:
+   - **Name:** įrašykite `LOV_PRESCRIPTION_STATUS`
+   - **Type:** palikite **Static**
+
+5. **Static Values** sekcijoje sukurkite recepto būsenas:
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `1` | **Display Value:** `Aktyvus` | **Return Value:** `ACTIVE`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `2` | **Display Value:** `Užbaigtas` | **Return Value:** `COMPLETED`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `3` | **Display Value:** `Atšauktas` | **Return Value:** `CANCELLED`
+
+6. Paspauskite **Create** mygtuką
+
+**✅ LOV_PRESCRIPTION_STATUS sukurtas!**
+
+---
+
+#### **LOV_LAB_TEST_STATUS** (Laboratorinio tyrimo būsena)
+
+**Sukūrimo žingsniai:**
+
+1. **List of Values** lange paspauskite **Create** mygtuką
+2. Pasirinkite **From Scratch** ir paspauskite **Next**
+3. **Create List of Values** lange:
+   - **Source:** pasirinkite **Static**
+   - Paspauskite **Next**
+
+4. **Name and Type** lange:
+   - **Name:** įrašykite `LOV_LAB_TEST_STATUS`
+   - **Type:** palikite **Static**
+
+5. **Static Values** sekcijoje sukurkite laboratorinio tyrimo būsenas:
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `1` | **Display Value:** `Užsakytas` | **Return Value:** `ORDERED`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `2` | **Display Value:** `Vykdomas` | **Return Value:** `IN_PROGRESS`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `3` | **Display Value:** `Baigtas` | **Return Value:** `COMPLETED`
+
+   - Paspauskite **Add Entry** mygtuką
+   - **Sequence:** `4` | **Display Value:** `Atšauktas` | **Return Value:** `CANCELLED`
+
+6. Paspauskite **Create** mygtuką
+
+**✅ LOV_LAB_TEST_STATUS sukurtas!**
+
+**🎉 Visi STATIC LOVs (14 vnt) sukurti sėkmingai!**
 
 ---
 
 ### 1.2 DYNAMIC LOVs (16 vnt)
 
-#### **LOV_DEPARTMENTS**
-```
-Name: LOV_DEPARTMENTS
-Type: Dynamic (SQL Query)
-SQL Query:
-```
+**Dinaminiai LOVs** naudoja SQL užklausas, kad gautų reikšmes tiesiogiai iš duomenų bazės lentelių. Skirtingai nuo statinių LOVs, čia reikšmės automatiškai atsinaujina, kai pasikeičia duomenys lentelėse.
+
+#### **LOV_DEPARTMENTS** (Skyriai)
+
+**Sukūrimo žingsniai:**
+
+1. **List of Values** lange paspauskite **Create** mygtuką
+2. Pasirinkite **From Scratch** ir paspauskite **Next**
+3. **Create List of Values** lange:
+   - **Source:** pasirinkite **From Database or Query** (arba **Dynamic**)
+   - Paspauskite **Next**
+
+4. **Name and Type** lange:
+   - **Name:** įrašykite `LOV_DEPARTMENTS`
+   - **Type:** palikite **SQL Query**
+
+5. **Query** sekcijoje įterpkite SQL užklausą:
+
 ```sql
 SELECT department_name AS d,
        department_id AS r
@@ -248,27 +615,34 @@ SELECT department_name AS d,
  ORDER BY department_name
 ```
 
-**Kaip sukurti:**
-1. **Create** → **From Scratch** → **Dynamic**
-2. **Name:** LOV_DEPARTMENTS
-3. **Query:**
-```sql
-SELECT department_name AS d,
-       department_id AS r
-  FROM departments
- WHERE is_active = 'Y'
- ORDER BY department_name
-```
-4. **Create**
+**SQL paaiškinimas:**
+- `AS d` - Display column (rodoma reikšmė vartotojui)
+- `AS r` - Return column (grąžinama reikšmė į duomenų bazę)
+- `WHERE is_active = 'Y'` - rodo tik aktyvius skyrius
+- `ORDER BY` - surikiuoja pagal skyriaus pavadinimą
+
+6. Paspauskite **Create** mygtuką
+
+**✅ LOV_DEPARTMENTS sukurtas!**
 
 ---
 
-#### **LOV_DOCTORS**
-```
-Name: LOV_DOCTORS
-Type: Dynamic
-SQL Query:
-```
+#### **LOV_DOCTORS** (Gydytojai)
+
+**Sukūrimo žingsniai:**
+
+1. **List of Values** lange paspauskite **Create** mygtuką
+2. Pasirinkite **From Scratch** ir paspauskite **Next**
+3. **Create List of Values** lange:
+   - **Source:** pasirinkite **From Database or Query**
+   - Paspauskite **Next**
+
+4. **Name and Type** lange:
+   - **Name:** įrašykite `LOV_DOCTORS`
+   - **Type:** palikite **SQL Query**
+
+5. **Query** sekcijoje įterpkite SQL užklausą:
+
 ```sql
 SELECT e.first_name || ' ' || e.last_name || ' (' || d.specialization || ')' AS d,
        d.doctor_id AS r
@@ -278,14 +652,34 @@ SELECT e.first_name || ' ' || e.last_name || ' (' || d.specialization || ')' AS 
  ORDER BY e.last_name, e.first_name
 ```
 
+**SQL paaiškinimas:**
+- `||` - konkatenacijos operatorius (sujungia tekstus)
+- Rodoma reikšmė: "Vardas Pavardė (Specializacija)"
+- `JOIN` - sujungia gydytojų ir darbuotojų lenteles
+- Rodo tik aktyvius gydytojus (`ACTIVE`)
+
+6. Paspauskite **Create** mygtuką
+
+**✅ LOV_DOCTORS sukurtas!**
+
 ---
 
-#### **LOV_PATIENTS**
-```
-Name: LOV_PATIENTS
-Type: Dynamic
-SQL Query:
-```
+#### **LOV_PATIENTS** (Pacientai)
+
+**Sukūrimo žingsniai:**
+
+1. **List of Values** lange paspauskite **Create** mygtuką
+2. Pasirinkite **From Scratch** ir paspauskite **Next**
+3. **Create List of Values** lange:
+   - **Source:** pasirinkite **From Database or Query**
+   - Paspauskite **Next**
+
+4. **Name and Type** lange:
+   - **Name:** įrašykite `LOV_PATIENTS`
+   - **Type:** palikite **SQL Query**
+
+5. **Query** sekcijoje įterpkite SQL užklausą:
+
 ```sql
 SELECT first_name || ' ' || last_name || ' (' || TO_CHAR(date_of_birth, 'YYYY-MM-DD') || ')' AS d,
        patient_id AS r
@@ -294,14 +688,35 @@ SELECT first_name || ' ' || last_name || ' (' || TO_CHAR(date_of_birth, 'YYYY-MM
  ORDER BY last_name, first_name
 ```
 
+**SQL paaiškinimas:**
+- Rodoma reikšmė: "Vardas Pavardė (Gimimo data)"
+- `TO_CHAR()` - formatuoja datą į tekstą
+- Rodo tik aktyvius pacientus
+
+6. Paspauskite **Create** mygtuką
+
+**✅ LOV_PATIENTS sukurtas!**
+
 ---
 
-#### **LOV_PATIENTS_AUTOCOMPLETE** (su search)
-```
-Name: LOV_PATIENTS_AUTOCOMPLETE
-Type: Dynamic
-SQL Query:
-```
+#### **LOV_PATIENTS_AUTOCOMPLETE** (Pacientai su paieška)
+
+**Šis LOV turi papildomą paieškos funkcionalumą (autocomplete).**
+
+**Sukūrimo žingsniai:**
+
+1. **List of Values** lange paspauskite **Create** mygtuką
+2. Pasirinkite **From Scratch** ir paspauskite **Next**
+3. **Create List of Values** lange:
+   - **Source:** pasirinkite **From Database or Query**
+   - Paspauskite **Next**
+
+4. **Name and Type** lange:
+   - **Name:** įrašykite `LOV_PATIENTS_AUTOCOMPLETE`
+   - **Type:** palikite **SQL Query**
+
+5. **Query** sekcijoje įterpkite SQL užklausą:
+
 ```sql
 SELECT first_name || ' ' || last_name AS d,
        patient_id AS r
@@ -312,17 +727,39 @@ SELECT first_name || ' ' || last_name AS d,
         OR insurance_number LIKE '%' || :SEARCH_STRING || '%')
  ORDER BY last_name, first_name
 ```
-**Display Extra Values:** Yes
-**Display Null Value:** Yes
+
+**SQL paaiškinimas:**
+- `:SEARCH_STRING` - APEX bind kintamasis, kuris priima paieškos tekstą
+- `UPPER()` - konvertuoja į didžiąsias raides (case-insensitive paieška)
+- `LIKE '%...%'` - ieško teksto bet kurioje pozicijoje
+- Ieškoma pagal vardą, pavardę arba draudimo numerį
+
+6. **Papildomos savybės (Settings sekcijoje):**
+   - **Display Extra Values:** pasirinkite **Yes**
+   - **Display Null Value:** pasirinkite **Yes**
+
+7. Paspauskite **Create** mygtuką
+
+**✅ LOV_PATIENTS_AUTOCOMPLETE sukurtas!**
 
 ---
 
-#### **LOV_MEDICATIONS**
-```
-Name: LOV_MEDICATIONS
-Type: Dynamic
-SQL Query:
-```
+#### **LOV_MEDICATIONS** (Vaistai)
+
+**Sukūrimo žingsniai:**
+
+1. **List of Values** lange paspauskite **Create** mygtuką
+2. Pasirinkite **From Scratch** ir paspauskite **Next**
+3. **Create List of Values** lange:
+   - **Source:** pasirinkite **From Database or Query**
+   - Paspauskite **Next**
+
+4. **Name and Type** lange:
+   - **Name:** įrašykite `LOV_MEDICATIONS`
+   - **Type:** palikite **SQL Query**
+
+5. **Query** sekcijoje įterpkite SQL užklausą:
+
 ```sql
 SELECT medication_name || ' ' || strength || ' (' || dosage_form || ')' AS d,
        medication_id AS r
@@ -331,14 +768,32 @@ SELECT medication_name || ' ' || strength || ' (' || dosage_form || ')' AS d,
  ORDER BY medication_name
 ```
 
+**SQL paaiškinimas:**
+- Rodoma reikšmė: "Vaisto pavadinimas Stiprumas (Forma)"
+- Rodo tik prieinamus vaistus
+
+6. Paspauskite **Create** mygtuką
+
+**✅ LOV_MEDICATIONS sukurtas!**
+
 ---
 
-#### **LOV_DIAGNOSES**
-```
-Name: LOV_DIAGNOSES
-Type: Dynamic
-SQL Query:
-```
+#### **LOV_DIAGNOSES** (Diagnozes)
+
+**Sukūrimo žingsniai:**
+
+1. **List of Values** lange paspauskite **Create** mygtuką
+2. Pasirinkite **From Scratch** ir paspauskite **Next**
+3. **Create List of Values** lange:
+   - **Source:** pasirinkite **From Database or Query**
+   - Paspauskite **Next**
+
+4. **Name and Type** lange:
+   - **Name:** įrašykite `LOV_DIAGNOSES`
+   - **Type:** palikite **SQL Query**
+
+5. **Query** sekcijoje įterpkite SQL užklausą:
+
 ```sql
 SELECT diagnosis_code || ' - ' || diagnosis_name AS d,
        diagnosis_id AS r
@@ -347,14 +802,32 @@ SELECT diagnosis_code || ' - ' || diagnosis_name AS d,
  ORDER BY diagnosis_code
 ```
 
+**SQL paaiškinimas:**
+- Rodoma reikšmė: "Kodas - Pavadinimas"
+- Rodo tik aktyvias diagnozes
+
+6. Paspauskite **Create** mygtuką
+
+**✅ LOV_DIAGNOSES sukurtas!**
+
 ---
 
-#### **LOV_ROOMS**
-```
-Name: LOV_ROOMS
-Type: Dynamic
-SQL Query:
-```
+#### **LOV_ROOMS** (Kambariai)
+
+**Sukūrimo žingsniai:**
+
+1. **List of Values** lange paspauskite **Create** mygtuką
+2. Pasirinkite **From Scratch** ir paspauskite **Next**
+3. **Create List of Values** lange:
+   - **Source:** pasirinkite **From Database or Query**
+   - Paspauskite **Next**
+
+4. **Name and Type** lange:
+   - **Name:** įrašykite `LOV_ROOMS`
+   - **Type:** palikite **SQL Query**
+
+5. **Query** sekcijoje įterpkite SQL užklausą:
+
 ```sql
 SELECT r.room_number || ' (' || r.room_type || ', ' || d.department_name || ')' AS d,
        r.room_id AS r
@@ -364,14 +837,33 @@ SELECT r.room_number || ' (' || r.room_type || ', ' || d.department_name || ')' 
  ORDER BY r.room_number
 ```
 
+**SQL paaiškinimas:**
+- Rodoma reikšmė: "Numeris (Tipas, Skyrius)"
+- JOIN su departments lentele
+- Rodo tik prieinamus kambarius
+
+6. Paspauskite **Create** mygtuką
+
+**✅ LOV_ROOMS sukurtas!**
+
 ---
 
-#### **LOV_BEDS**
-```
-Name: LOV_BEDS
-Type: Dynamic
-SQL Query:
-```
+#### **LOV_BEDS** (Lovos)
+
+**Sukūrimo žingsniai:**
+
+1. **List of Values** lange paspauskite **Create** mygtuką
+2. Pasirinkite **From Scratch** ir paspauskite **Next**
+3. **Create List of Values** lange:
+   - **Source:** pasirinkite **From Database or Query**
+   - Paspauskite **Next**
+
+4. **Name and Type** lange:
+   - **Name:** įrašykite `LOV_BEDS`
+   - **Type:** palikite **SQL Query**
+
+5. **Query** sekcijoje įterpkite SQL užklausą:
+
 ```sql
 SELECT r.room_number || '-' || b.bed_number || ' (' || b.bed_status || ')' AS d,
        b.bed_id AS r
@@ -381,14 +873,33 @@ SELECT r.room_number || '-' || b.bed_number || ' (' || b.bed_status || ')' AS d,
  ORDER BY r.room_number, b.bed_number
 ```
 
+**SQL paaiškinimas:**
+- Rodoma reikšmė: "Kambario_Nr-Lovos_Nr (Būsena)"
+- JOIN su rooms lentele
+- Rodo tik laisvas arba rezervuotas lovas
+
+6. Paspauskite **Create** mygtuką
+
+**✅ LOV_BEDS sukurtas!**
+
 ---
 
-#### **LOV_NURSES**
-```
-Name: LOV_NURSES
-Type: Dynamic
-SQL Query:
-```
+#### **LOV_NURSES** (Slaugytojos)
+
+**Sukūrimo žingsniai:**
+
+1. **List of Values** lange paspauskite **Create** mygtuką
+2. Pasirinkite **From Scratch** ir paspauskite **Next**
+3. **Create List of Values** lange:
+   - **Source:** pasirinkite **From Database or Query**
+   - Paspauskite **Next**
+
+4. **Name and Type** lange:
+   - **Name:** įrašykite `LOV_NURSES`
+   - **Type:** palikite **SQL Query**
+
+5. **Query** sekcijoje įterpkite SQL užklausą:
+
 ```sql
 SELECT e.first_name || ' ' || e.last_name AS d,
        n.nurse_id AS r
@@ -398,16 +909,39 @@ SELECT e.first_name || ' ' || e.last_name AS d,
  ORDER BY e.last_name, e.first_name
 ```
 
+**SQL paaiškinimas:**
+- Rodoma reikšmė: "Vardas Pavardė"
+- JOIN su employees lentele
+- Rodo tik aktyvias slaugytojas
+
+6. Paspauskite **Create** mygtuką
+
+**✅ LOV_NURSES sukurtas!**
+
+**🎉 Visi DYNAMIC LOVs (16 vnt) sukurti sėkmingai!**
+
 ---
 
 ### 1.3 CASCADE LOVs (3 vnt - priklauso nuo parent item)
 
-#### **LOV_ROOMS_BY_DEPT**
-```
-Name: LOV_ROOMS_BY_DEPT
-Type: Dynamic
-SQL Query:
-```
+**Cascade LOVs** - tai dinaminiai LOVs, kurių reikšmės priklauso nuo kito formos lauko (parent item) reikšmės. Pavyzdžiui, pasirinkus skyrių, kambarių sąrašas automatiškai filtruojamas pagal tą skyrių.
+
+#### **LOV_ROOMS_BY_DEPT** (Kambariai pagal skyrių)
+
+**Sukūrimo žingsniai:**
+
+1. **List of Values** lange paspauskite **Create** mygtuką
+2. Pasirinkite **From Scratch** ir paspauskite **Next**
+3. **Create List of Values** lange:
+   - **Source:** pasirinkite **From Database or Query**
+   - Paspauskite **Next**
+
+4. **Name and Type** lange:
+   - **Name:** įrašykite `LOV_ROOMS_BY_DEPT`
+   - **Type:** palikite **SQL Query**
+
+5. **Query** sekcijoje įterpkite SQL užklausą:
+
 ```sql
 SELECT room_number || ' (' || room_type || ')' AS d,
        room_id AS r
@@ -416,21 +950,48 @@ SELECT room_number || ' (' || room_type || ')' AS d,
    AND is_available = 'Y'
  ORDER BY room_number
 ```
-**Pastaba:** `:P103_DEPARTMENT_ID` - parent item (Department dropdown)
 
-**Kaip naudoti formoje:**
-1. Sukurti Select List su LOV_DEPARTMENTS (parent)
-2. Sukurti Select List su LOV_ROOMS_BY_DEPT (child)
-3. Child item **Cascading LOV Parent Item(s):** P103_DEPARTMENT_ID
+**SQL paaiškinimas:**
+- `:P103_DEPARTMENT_ID` - bind kintamasis, kuris nurodo parent item (skyriaus lauką)
+- Kambariai filtruojami pagal pasirinktą skyrių
+- Rodo tik prieinamus kambarius
+
+6. Paspauskite **Create** mygtuką
+
+**✅ LOV_ROOMS_BY_DEPT sukurtas!**
+
+**Kaip naudoti formoje (Cascade nustatymas):**
+
+1. **Page Designer** → atidaryti puslapį (pvz., Page 103)
+2. Sukurkite **Select List** lauką su **LOV_DEPARTMENTS** (parent laukas)
+   - Pavyzdžiui: `P103_DEPARTMENT_ID`
+3. Sukurkite **Select List** lauką su **LOV_ROOMS_BY_DEPT** (child laukas)
+   - Pavyzdžiui: `P103_ROOM_ID`
+4. Pasirinkite child lauką (`P103_ROOM_ID`)
+5. **Property Editor** → **List of Values** sekcijoje:
+   - **Cascading LOV Parent Item(s):** įrašykite `P103_DEPARTMENT_ID`
+6. **Save**
+
+**Veikimo principas:** Kai vartotojas pasirenka skyrių iš `P103_DEPARTMENT_ID`, kambarių sąrašas `P103_ROOM_ID` automatiškai atsinaujina ir rodo tik to skyriaus kambarius.
 
 ---
 
-#### **LOV_BEDS_BY_ROOM**
-```
-Name: LOV_BEDS_BY_ROOM
-Type: Dynamic
-SQL Query:
-```
+#### **LOV_BEDS_BY_ROOM** (Lovos pagal kambarį)
+
+**Sukūrimo žingsniai:**
+
+1. **List of Values** lange paspauskite **Create** mygtuką
+2. Pasirinkite **From Scratch** ir paspauskite **Next**
+3. **Create List of Values** lange:
+   - **Source:** pasirinkite **From Database or Query**
+   - Paspauskite **Next**
+
+4. **Name and Type** lange:
+   - **Name:** įrašykite `LOV_BEDS_BY_ROOM`
+   - **Type:** palikite **SQL Query**
+
+5. **Query** sekcijoje įterpkite SQL užklausą:
+
 ```sql
 SELECT bed_number || ' (' || bed_status || ')' AS d,
        bed_id AS r
@@ -439,14 +1000,38 @@ SELECT bed_number || ' (' || bed_status || ')' AS d,
  ORDER BY bed_number
 ```
 
+**SQL paaiškinimas:**
+- `:P103_ROOM_ID` - bind kintamasis, kuris nurodo parent item (kambario lauką)
+- Lovos filtruojamos pagal pasirinktą kambarį
+- Rodoma: "Lovos_Nr (Būsena)"
+
+6. Paspauskite **Create** mygtuką
+
+**✅ LOV_BEDS_BY_ROOM sukurtas!**
+
+**Kaip naudoti formoje:**
+1. Parent item: `P103_ROOM_ID` (su LOV_ROOMS_BY_DEPT)
+2. Child item: `P103_BED_ID` (su LOV_BEDS_BY_ROOM)
+3. Child item **Cascading LOV Parent Item(s):** `P103_ROOM_ID`
+
 ---
 
-#### **LOV_DOCTORS_BY_DEPT**
-```
-Name: LOV_DOCTORS_BY_DEPT
-Type: Dynamic
-SQL Query:
-```
+#### **LOV_DOCTORS_BY_DEPT** (Gydytojai pagal skyrių)
+
+**Sukūrimo žingsniai:**
+
+1. **List of Values** lange paspauskite **Create** mygtuką
+2. Pasirinkite **From Scratch** ir paspauskite **Next**
+3. **Create List of Values** lange:
+   - **Source:** pasirinkite **From Database or Query**
+   - Paspauskite **Next**
+
+4. **Name and Type** lange:
+   - **Name:** įrašykite `LOV_DOCTORS_BY_DEPT`
+   - **Type:** palikite **SQL Query**
+
+5. **Query** sekcijoje įterpkite SQL užklausą:
+
 ```sql
 SELECT e.first_name || ' ' || e.last_name || ' (' || d.specialization || ')' AS d,
        d.doctor_id AS r
@@ -457,9 +1042,27 @@ SELECT e.first_name || ' ' || e.last_name || ' (' || d.specialization || ')' AS 
  ORDER BY e.last_name, e.first_name
 ```
 
+**SQL paaiškinimas:**
+- `:P105_DEPARTMENT_ID` - bind kintamasis, kuris nurodo parent item (skyriaus lauką)
+- Gydytojai filtruojami pagal pasirinktą skyrių
+- JOIN su employees lentele
+- Rodo tik aktyvius gydytojus
+- Rodoma: "Vardas Pavardė (Specializacija)"
+
+6. Paspauskite **Create** mygtuką
+
+**✅ LOV_DOCTORS_BY_DEPT sukurtas!**
+
+**Kaip naudoti formoje:**
+1. Parent item: `P105_DEPARTMENT_ID` (su LOV_DEPARTMENTS)
+2. Child item: `P105_DOCTOR_ID` (su LOV_DOCTORS_BY_DEPT)
+3. Child item **Cascading LOV Parent Item(s):** `P105_DEPARTMENT_ID`
+
 ---
 
 **✅ SUKURTA: 30 LOVs (14 Static + 16 Dynamic + 3 CASCADE)**
+
+**🎉 SEKCIJA 1 BAIGTA! Visi LOV sukurti sėkmingai!**
 
 ---
 
