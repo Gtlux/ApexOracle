@@ -1581,26 +1581,66 @@ Paeiliui kiekvienam laukui pakeiskite **Label** į lietuvių kalbą:
 
 ---
 
-## 4. PATIENT MASTER-DETAIL (REQ 5)
+## 4. PACIENTO MASTER-DETAIL PROFILIS (REQ 5)
 
-### Page 103: Patient Profile (Master-Detail Side by Side)
+**Tikslas:** Sukurti Master-Detail puslapį, kuriame:
+- **Master** - Paciento pagrindiniai duomenys (PATIENTS lentelė)
+- **Detail** - Paciento vizitų sąrašas (APPOINTMENTS lentelė su Interactive Grid)
+- **Layout** - Side by Side (šalia vienas kito)
 
-**Kaip sukurti:**
-1. **Create Page** → **Form**
-2. **Page Mode:** Modal Dialog
-3. **Data Source:** Table PATIENTS
-4. **Page Number:** 103
-5. **Page Name:** Paciento Profilis
-6. **Create**
+---
 
-**Po sukūrimo, pridėti Detail region:**
+### Page 103: Paciento Profilis (Master-Detail)
 
-7. **Right-click** ant region "Paciento Profilis" → **Create Sub Region**
-8. **Title:** Vizitai
-9. **Type:** Interactive Grid
-10. **Source:**
-    - **Type:** SQL Query
-    - **SQL Query:**
+**Sukūrimo žingsniai naudojant Create Page Wizard:**
+
+1. **Application Home** lange paspauskite **Create Page** mygtuką
+2. Pasirinkite **Form**
+3. Pasirinkite **Form**
+
+4. **Page Attributes** lange:
+   - **Page Number:** įrašykite `103`
+   - **Name:** įrašykite `Paciento Profilis`
+   - **Page Mode:** pasirinkite **Normal** (ne Modal Dialog)
+   - Paspauskite **Next**
+
+5. **Navigation** lange:
+   - **Breadcrumb:** pasirinkite **Breadcrumb**
+   - **Parent Entry:** pasirinkite **Pacientai** (Page 101)
+   - Paspauskite **Next**
+
+6. **Data Source** lange:
+   - **Data Source:** pasirinkite **Table**
+   - **Table/View Name:** pasirinkite **PATIENTS**
+   - Paspauskite **Next**
+
+7. **Primary Key** lange:
+   - **Primary Key Column:** pasirinkite **PATIENT_ID**
+   - Paspauskite **Create**
+
+**✅ Master Form (Paciento duomenys) sukurtas!**
+
+---
+
+### 4.1 Pridėti Detail Region (Vizitai)
+
+**Dabar reikia pridėti Detail region su Interactive Grid, kuris rodys paciento vizitus.**
+
+**Sukūrimo žingsniai:**
+
+1. **Application Home** → paspauskite **103 - Paciento Profilis**
+2. Atsidarys **Page Designer**
+
+3. **Rendering Tree** → dešiniuoju pelės mygtuku paspauskite **Body**
+4. Išsirinkite **Create Region**
+
+5. **Property Editor** → **Identification** sekcijoje:
+   - **Title:** įrašykite `Paciento Vizitai`
+   - **Type:** pasirinkite **Interactive Grid**
+
+6. **Property Editor** → **Source** sekcijoje:
+   - **Type:** pasirinkite **SQL Query**
+   - **SQL Query:** įterpkite šią SQL užklausą:
 ```sql
 SELECT a.appointment_id,
        a.appointment_date AS "Data",
@@ -1616,36 +1656,82 @@ SELECT a.appointment_id,
  ORDER BY a.appointment_date DESC
 ```
 
-11. **Attributes:**
-    - **Edit Enabled:** Yes
-    - **Add Row:** Yes
-    - **Delete Row:** Yes
+**SQL paaiškinimas:**
+- `:P103_PATIENT_ID` - Master form lauko bind variable
+- `WHERE a.patient_id = :P103_PATIENT_ID` - rodo tik pasirinkto paciento vizitus
+- `ORDER BY a.appointment_date DESC` - naujausūs vizitai viršuje
 
-12. **Pakeisti Layout į Side by Side:**
-    - **Edit Page 103**
-    - **Page Designer** → **Layout** tab
-    - **Master Region:** Left Column
-    - **Detail Region:** Right Column
+7. **Property Editor** → **Attributes** sekcijoje:
+   - Išskleidžiant **Attributes** skiltį, pamatysite Interactive Grid konfigūraciją
+   - **Edit:** → **Enabled:** pasirinkite **Yes**
+   - **Add Row:** pasirinkite **Yes**
+   - **Delete Row:** pasirinkite **Yes**
+   - Tai leis redaguoti, pridėti ir trinti vizitus tiesiogiai iš grid
 
-13. **Page Template:** Standard
-14. **Form Template:** Labels Left
+8. **Toolbar** → **Save**
 
-**✅ REQ 5: Master-Detail Side by Side SUKURTAS**
+**✅ Detail Region (Vizitai) sukurtas!**
 
 ---
 
-## 5. APPOINTMENTS CALENDAR (REQ 6)
+### 4.2 Pakeisti Layout į Side by Side
 
-### Page 105: Appointments Calendar su Drag & Drop
+**Dabar reikia išdėstyti Master ir Detail regions šalia vienas kito.**
 
-**Kaip sukurti:**
-1. **Create Page** → **Calendar**
-2. **Page Number:** 105
-3. **Page Name:** Vizitų Kalendorius
-4. **Table/View:** V_APPOINTMENTS_CALENDAR (arba APPOINTMENTS)
-5. **Display Column:** Pasirink SQL Query vietoj Table
+**Sukūrimo žingsniai:**
 
-**SQL Query:**
+1. **Page Designer** → **Rendering Tree**
+2. Pasirinkite **Paciento Profilis** region (Master)
+3. **Property Editor** → **Layout** sekcijoje:
+   - **Position:** pasirinkite **Content Body** → **Left Column** arba **Region Position 1**
+   - **Start New Row:** pasirinkite **Yes**
+
+4. Pasirinkite **Paciento Vizitai** region (Detail)
+5. **Property Editor** → **Layout** sekcijoje:
+   - **Position:** pasirinkite **Content Body** → **Right Column** arba **Region Position 2**
+   - **Start New Row:** pasirinkite **No**
+
+6. **Toolbar** → **Save and Run Page**
+
+**Turėtumėte matyti:** Master formą kairėje, Detail grid dešinėje.
+
+**✅ REQ 5: Master-Detail Side by Side SUKURTAS SĖKMINGAI!**
+
+---
+
+## 5. VIZITŲ KALENDORIUS (REQ 6)
+
+**Tikslas:** Sukurti kalendorių su:
+- **Vizitų rodymą** pagal datas
+- **Drag & Drop** funkcionalumą (perstumti vizitus į kitas dienas)
+- **Spalvų kodavimą** pagal vizito statusą
+- **Nuorodas** į vizito formą
+
+---
+
+### Page 105: Vizitų Kalendorius su Drag & Drop
+
+**Sukūrimo žingsniai naudojant Create Page Wizard:**
+
+1. **Application Home** lange paspauskite **Create Page** mygtuką
+2. Pasirinkite **Calendar**
+
+3. **Page Attributes** lange:
+   - **Page Number:** įrašykite `105`
+   - **Name:** įrašykite `Vizitų Kalendorius`
+   - Paspauskite **Next**
+
+4. **Navigation** lange:
+   - **Breadcrumb:** pasirinkite **Breadcrumb**
+   - **Parent Entry:** pasirinkite **Home** (Page 1)
+   - Paspauskite **Next**
+
+5. **Source Type** lange:
+   - **Source Type:** pasirinkite **SQL Query**
+   - Paspauskite **Next**
+
+6. **SQL Query** lange:
+   - **SQL Query:** įterpkite šią SQL užklausą:
 ```sql
 SELECT appointment_id,
        patient_id || ': ' ||
@@ -1663,23 +1749,59 @@ SELECT appointment_id,
   FROM appointments a
 ```
 
-6. **Primary Key:** APPOINTMENT_ID
-7. **Display Column:** TITLE
-8. **Start Date:** START_DATE
-9. **End Date:** END_DATE
-10. **Create**
+**SQL paaiškinimas:**
+- `title` - vizito aprašymas kalendoriuje (Paciento vardas → Gydytojo vardas)
+- `css_class` - spalvų kodas pagal statusą (blue, green, gray, red)
+- `start_date` ir `end_date` - tos pačios datos (vizitai yra vienos dienos įvykiai)
 
-**Pridėti Drag & Drop:**
+7. Paspauskite **Next**
 
-11. **Edit Calendar Region** → **Attributes**
-12. **Drag and Drop:** Yes
-13. **Create Link:** Target → Page 102 (Appointment Form)
-14. **View / Edit Link:** Target → Page 102
+8. **Settings** lange:
+   - **Display Column:** pasirinkite **TITLE**
+   - **Start Date Column:** pasirinkite **START_DATE**
+   - **End Date Column:** pasirinkite **END_DATE**
+   - **Primary Key:** pasirinkite **APPOINTMENT_ID**
+   - Paspauskite **Create**
 
-15. **Processing** → **Create Process** (AFTER Calendar region)
-16. **Name:** Update Appointment Date
-17. **Type:** Execute Code
-18. **PL/SQL Code:**
+**✅ Kalendorius sukurtas!**
+
+---
+
+### 5.1 Pridėti Drag & Drop Funkcionalumą
+
+**Dabar reikia įjungti drag & drop, kad būtų galima perkelti vizitus į kitas dienas.**
+
+**Sukūrimo žingsniai:**
+
+1. **Application Home** → paspauskite **105 - Vizitų Kalendorius**
+2. Atsidarys **Page Designer**
+
+3. **Rendering Tree** → pasirinkite Calendar region
+4. **Property Editor** → **Attributes** sekcijoje:
+   - **Drag and Drop:** pasirinkite **Yes**
+
+5. **Toolbar** → **Save**
+
+**✅ Drag & Drop įjungtas!**
+
+---
+
+### 5.2 Pridėti Process (Atnaujinti datą po Drag & Drop)
+
+**Dabar reikia sukurti procesą, kuris atnaujins vizito datą, kai vartotojas perstumia vizitą.**
+
+**Sukūrimo žingsniai:**
+
+1. **Rendering Tree** → perjunkite į **Processing** tab
+2. Dešiniuoju pelės mygtuku paspauskite **Processing**
+3. Išsirinkite **Create Process**
+
+4. **Property Editor** → **Identification** sekcijoje:
+   - **Name:** įrašykite `Update Appointment Date on Drag`
+   - **Type:** pasirinkite **Execute Code**
+
+5. **Property Editor** → **Source** sekcijoje:
+   - **PL/SQL Code:** įterpkite šį PL/SQL kodą:
 ```sql
 BEGIN
     UPDATE appointments
@@ -1688,24 +1810,59 @@ BEGIN
      WHERE appointment_id = :APEX$PK_VALUE;
 END;
 ```
-19. **When:** After Submit
-20. **Condition:** Request = CHANGE_DATE
 
-**✅ REQ 6: Calendar su drag & drop SUKURTAS**
+**PL/SQL paaiškinimas:**
+- `:APEX$NEW_START_DATE` - nauja data (po drag & drop)
+- `:APEX$PK_VALUE` - vizito ID (APPOINTMENT_ID)
+- `TO_DATE(..., 'YYYYMMDD')` - formatuoja datą
+
+6. **Property Editor** → **Server-side Condition** sekcijoje:
+   - **When Button Pressed:** palikite tuščią (nebus naudojamas)
+   - **Condition Type:** pasirinkite **Request is Contained in Value**
+   - **Value:** įrašykite `CHANGE_DATE`
+
+7. **Toolbar** → **Save and Run Page**
+
+**Testuokite:** Pabandykite perstumti vizitą į kitą dieną - data turėtų atsinaujinti automatiškai.
+
+**✅ REQ 6: Kalendorius su Drag & Drop SUKURTAS SĖKMINGAI!**
 
 ---
 
-## 6. BILLS REPORT SU VIEW (REQ 4)
+## 6. SĄSKAITŲ REPORT SU VIEW (REQ 4)
 
-### Page 501: Bills Report (VIEW-based)
+**Tikslas:** Sukurti Interactive Report su:
+- **VIEW naudojimu** (`V_BILLS_DETAILED` su multi-table JOIN)
+- **Spalvų kodavimu** pagal apmokėjimo statusą
+- **Agregacijomis** (suma, sumokėta, likutis)
+- **Form** sąskaitų redagavimui
 
-**Kaip sukurti:**
-1. **Create Page** → **Report** → **Interactive Report**
-2. **Page Number:** 501
-3. **Page Name:** Sąskaitos
-4. **Source:** SQL Query
+**Naudojamas VIEW:** `V_BILLS_DETAILED` (JOIN su BILLS, PATIENTS, APPOINTMENTS, ADMISSIONS)
 
-**SQL Query (naudojant VIEW):**
+---
+
+### Page 501: Sąskaitų Interactive Report
+
+**Sukūrimo žingsniai naudojant Create Page Wizard:**
+
+1. **Application Home** lange paspauskite **Create Page** mygtuką
+2. Pasirinkite **Report**
+3. Pasirinkite **Interactive Report**
+
+4. **Page Attributes** lange:
+   - **Page Number:** įrašykite `501`
+   - **Name:** įrašykite `Sąskaitos`
+   - **Page Mode:** pasirinkite **Normal**
+   - Paspauskite **Next**
+
+5. **Navigation** lange:
+   - **Breadcrumb:** pasirinkite **Breadcrumb**
+   - **Parent Entry:** pasirinkite **Home** (Page 1)
+   - Paspauskite **Next**
+
+6. **Report Source** lange:
+   - **Source Type:** pasirinkite **SQL Query**
+   - **SQL Query:** įterpkite šią SQL užklausą (naudojant VIEW):
 ```sql
 SELECT bill_id,
        patient_name AS "Pacientas",
@@ -1722,33 +1879,112 @@ SELECT bill_id,
  ORDER BY bill_date DESC
 ```
 
-5. **Include Form Page:** Yes (sukurs Page 502)
-6. **Primary Key:** BILL_ID
-7. **Create**
+**SQL paaiškinimas:**
+- `V_BILLS_DETAILED` - VIEW su multi-table JOIN (BILLS + PATIENTS + ...)
+- VIEW turi computed stulpelius: `patient_name`, `payment_status_display`, `source_type`
+- `WHERE payment_status IN (...)` - rodo visas sąskaitas
 
-**Format stulpelius:**
+7. Paspauskite **Next**
 
-8. **Edit Columns:**
-   - **Suma, Sumokėta, Likutis:**
-     - **Type:** Number Field
-     - **Format Mask:** 999G999G999G999G990D00
-     - **Alignment:** Right
+8. **Link Column** lange:
+   - **Link Column:** pasirinkite **Link to Custom Target**
+   - **Target:** Page 502 (Form)
+   - Paspauskite **Next**
 
-   - **Statusas:**
-     - **Highlight:**
-       - UNPAID → Red
-       - PARTIAL → Orange
-       - PAID → Green
-       - OVERDUE → Dark Red
+9. **Options** lange:
+   - **Include Form Page:** pasirinkite **Yes**
+   - **Form Page Number:** palikite `502`
+   - **Form Page Name:** įrašykite `Sąskaitos Forma`
+   - Paspauskite **Next**
 
-**Pridėti agregacijas:**
+10. **Primary Key** lange:
+    - **Primary Key Column:** pasirinkite **BILL_ID**
+    - Paspauskite **Create**
 
-9. **Aggregate:**
-   - **Suma:** Sum
-   - **Sumokėta:** Sum
-   - **Likutis:** Sum
+**✅ Interactive Report sukurtas!**
 
-**✅ REQ 4: Report su VIEW (multi-table JOIN) SUKURTAS**
+---
+
+### 6.1 Formatuoti Stulpelius (Suma, Statusas)
+
+**Dabar reikia suformatuoti stulpelius: skaičius su formatais ir spalvų kodavimu.**
+
+**Sukūrimo žingsniai:**
+
+1. **Application Home** → paspauskite **501 - Sąskaitos**
+2. Atsidarys **Page Designer**
+
+3. **Rendering Tree** → pasirinkite **Sąskaitos** region → išskleidžiate **Columns**
+
+**Formatuoti pinigų stulpelius:**
+
+4. Pasirinkite **Suma** column
+5. **Property Editor** → **Appearance** sekcijoje:
+   - **Format Mask:** pasirinkite **999G999G999G999G990D00** (arba įrašykite)
+   - **Alignment:** pasirinkite **Right**
+
+6. Pasirinkite **Sumokėta** column
+7. **Property Editor** → **Appearance** sekcijoje:
+   - **Format Mask:** `999G999G999G999G990D00`
+   - **Alignment:** `Right`
+
+8. Pasirinkite **Likutis** column
+9. **Property Editor** → **Appearance** sekcijoje:
+   - **Format Mask:** `999G999G999G999G990D00`
+   - **Alignment:** `Right`
+
+**Spalvų kodavimas pagal statusą:**
+
+10. Pasirinkite **Statusas** column
+11. **Property Editor** → **Highlight** sekcijoje:
+    - Paspauskite **Add Highlight**
+    - **Name:** `Neapmokėta`
+    - **Condition Type:** `Column Value`
+    - **Column:** `PAYMENT_STATUS_DISPLAY`
+    - **Operator:** `=`
+    - **Expression:** `Neapmokėta`
+    - **Background Color:** `#FF0000` (raudona)
+    - Paspauskite **Create**
+
+12. Pridėkite daugiau highlights:
+    - `Dalinai` → Orange (`#FFA500`)
+    - `Apmokėta` → Green (`#00FF00`)
+    - `Vėluoja` → Dark Red (`#8B0000`)
+
+13. **Toolbar** → **Save**
+
+**✅ Stulpeliai suformatuoti!**
+
+---
+
+### 6.2 Pridėti Agregacijas (Sum)
+
+**Dabar reikia pridėti agregacijas, kad matytume bendrą sumą.**
+
+**Sukūrimo žingsniai:**
+
+1. **Page Designer** → **Rendering Tree** → **Sąskaitos** region
+2. **Property Editor** → **Attributes** sekcijoje → **Appearance** → **Show Totals Row:** pasirinkite **Yes**
+
+3. **Rendering Tree** → išskleidžiate **Columns**
+
+4. Pasirinkite **Suma** column
+5. **Property Editor** → **Aggregation** sekcijoje:
+   - **Aggregation Type:** pasirinkite **Sum**
+
+6. Pasirinkite **Sumokėta** column
+7. **Property Editor** → **Aggregation** sekcijoje:
+   - **Aggregation Type:** pasirinkite **Sum**
+
+8. Pasirinkite **Likutis** column
+9. **Property Editor** → **Aggregation** sekcijoje:
+   - **Aggregation Type:** pasirinkite **Sum**
+
+10. **Toolbar** → **Save and Run Page**
+
+**Turėtumėte matyti:** Bendras sumas apačioje (Total row).
+
+**✅ REQ 4: Report su VIEW (multi-table JOIN) ir agregacijomis SUKURTAS SĖKMINGAI!**
 
 ---
 
